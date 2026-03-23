@@ -67,14 +67,13 @@ background:green;
 </thead>
 
 <tbody id="ordersTable"></tbody>
-
 </table>
 
 <script>
 
 function loadOrders(){
 
-fetch("http://localhost:3000/orders")
+fetch("https://cookiemisu-2.onrender.com/orders")
 .then(res => res.json())
 .then(data => {
 
@@ -108,7 +107,7 @@ ${order.status === 'done'
 
 function markDone(id){
 
-fetch(`http://localhost:3000/order/${id}`, {
+fetch(`https://cookiemisu-2.onrender.com/order/${id}`, {
 method: "PUT"
 })
 .then(res => res.text())
