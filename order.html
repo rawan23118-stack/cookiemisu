@@ -232,6 +232,8 @@ render();
 
 function checkout(){
 
+console.log("CLICKED");
+
 let name = document.getElementById("customerName").value;
 let phone = document.getElementById("customerPhone").value;
 
@@ -244,7 +246,7 @@ cart.forEach(item=>{
 item.price = getPrice(item);
 });
 
-fetch("https://cookiemisu-2.onrender.com/order", {
+fetch("https://cookiemisu-5.onrender.com/order", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
