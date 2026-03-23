@@ -9,22 +9,24 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT
+  host: process.env.MYSQLHOST || process.env.DB_HOST,
+  user: process.env.MYSQLUSER || process.env.DB_USER,
+  password: process.env.MYSQLPASSWORD || process.env.DB_PASS,
+  database: process.env.MYSQLDATABASE || process.env.DB_NAME,
+  port: process.env.MYSQLPORT || process.env.DB_PORT
 });
 
 db.connect(err => {
   if (err) {
-    console.log("DB Error:", err);
+    console.log("❌ DB Error:", err);
   } else {
-    console.log("Connected to DB");
+    console.log("✅ Connected to DB");
   }
 });
 
 app.post("/order", (req, res) => {
+  console.log("BODY:", req.body);
+
   const { name, phone, cart } = req.body;
 
   if (!name || !phone || !cart || cart.length === 0) {
@@ -40,12 +42,14 @@ app.post("/order", (req, res) => {
   let sent = false;
 
   cart.forEach(item => {
+    console.log("ITEM:", item);
+
     db.query(
       sql,
       [
         name,
         phone,
-        item.name,
+        item.name || "",
         item.size || "",
         item.quantity || 1,
         item.price || 0
@@ -54,6 +58,7 @@ app.post("/order", (req, res) => {
         if (sent) return;
 
         if (err) {
+          console.log("❌ Insert Error:", err);
           sent = true;
           return res.status(500).send("Database error");
         }
@@ -62,7 +67,7 @@ app.post("/order", (req, res) => {
 
         if (completed === cart.length) {
           sent = true;
-          res.send("Order saved");
+          res.send("✅ Order saved");
         }
       }
     );
@@ -72,6 +77,7 @@ app.post("/order", (req, res) => {
 app.get("/orders", (req, res) => {
   db.query("SELECT * FROM orders", (err, result) => {
     if (err) {
+      console.log("❌ Fetch Error:", err);
       return res.status(500).send("Error fetching");
     }
     res.json(result);
@@ -86,6 +92,7 @@ app.put("/order/:id", (req, res) => {
     [id],
     (err) => {
       if (err) {
+        console.log("❌ Update Error:", err);
         return res.status(500).send("Error updating");
       }
       res.send("updated");
@@ -94,5 +101,5 @@ app.put("/order/:id", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running");
+  console.log("🚀 Server running");
 });
