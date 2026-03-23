@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cookiemisu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Playfair Display', serif;
+}
+
+body{
+background:#f6f1ec;
+color:#5a3a2e;
+}
+
+/* HEADER */
+header{
+position:sticky;
+top:0;
+z-index:1000;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#f2eae4;
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+}
+
+nav{
+display:flex;
+gap:25px;
+}
+
+a{
+text-decoration:none;
+color:#7a5a45;
+transition:0.3s;
+}
+
+a:hover{
+color:#000;
+}
+
+/* HERO */
+.hero{
+height:500px;
+background:url("img/9.jpg") center/cover;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.hero-content{
+background:rgba(255,255,255,0.6);
+padding:40px;
+border-radius:12px;
+backdrop-filter:blur(5px);
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:10px;
+}
+
+.hero p{
+margin-bottom:20px;
+font-size:16px;
+}
+
+.hero button{
+background:#3e2723;
+color:white;
+border:none;
+padding:15px 40px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+border-radius:5px;
+}
+
+.hero button:hover{
+background:#000;
+transform:scale(1.05);
+}
+
+/* SECTION */
+.section{
+padding:70px;
+text-align:center;
+}
+
+/* CARDS */
+.cards{
+display:flex;
+gap:25px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.card{
+position:relative;
+background:white;
+padding:15px;
+border-radius:12px;
+width:260px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+/* BADGE */
+.badge{
+position:absolute;
+top:10px;
+left:10px;
+background:#5c3b2e;
+color:white;
+padding:5px 10px;
+font-size:12px;
+border-radius:5px;
+}
+
+.card button{
+margin-top:10px;
+width:100%;
+padding:10px;
+border:none;
+background:#5c3b2e;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+.card button:hover{
+background:#000;
+}
+
+/* WHY US */
+.why{
+background:#f2eae4;
+padding:70px;
+text-align:center;
+}
+
+.why div{
+margin:12px 0;
+font-size:15px;
+}
+
+/* REVIEWS */
+.reviews{
+padding:70px;
+text-align:center;
+}
+
+.review{
+margin:20px auto;
+max-width:500px;
+font-style:italic;
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:20px;
+background:#f2eae4;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">COOKIEMISU</div>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">Menu</a>
+<a href="#">Orders</a>
+<a href="https://www.instagram.com/cookiemisu/" target="_blank">Instagram</a>
+</nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+<h1>Fresh Tiramisu Cookies — Made Daily</h1>
+<p>Limited batches. Premium ingredients. Unforgettable taste.</p>
+
+<button onclick="window.open('https://www.instagram.com/cookiemisu/', '_blank')">
+Order Now
+</button>
+
+</div>
+</section>
+
+<!-- BEST SELLERS -->
+<section class="section">
+<h2>Best Sellers</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="badge">Best Seller</div>
+<img src="img/1.png">
+<h3>Tiramisu Cookies</h3>
+<p>Crispy outside, creamy inside</p>
+<button onclick="window.open('https://www.instagram.com/cookiemisu/', '_blank')">
+Order
+</button>
+</div>
+
+<div class="card">
+<img src="img/6.png">
+<h3>Dubai Chocolate</h3>
+<p>Rich and indulgent flavor</p>
+<button onclick="window.open('https://www.instagram.com/cookiemisu/', '_blank')">
+Order
+</button>
+</div>
+
+<div class="card">
+<img src="img/2.png">
+<h3>Classic Tiramisu</h3>
+<p>Authentic Italian taste</p>
+<button onclick="window.open('https://www.instagram.com/cookiemisu/', '_blank')">
+Order
+</button>
+</div>
+
+</div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+<h2>Why Cookiemisu?</h2>
+<div>Freshly made daily</div>
+<div>Premium ingredients only</div>
+<div>Limited batches for quality</div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews">
+<h2>What People Say</h2>
+
+<div class="review">“Best tiramisu cookies I’ve ever tried!”</div>
+<div class="review">“Perfect balance between sweet and creamy.”</div>
+
+</section>
+
+<footer>
+© Cookiemisu
+</footer>
+
+</body>
+</html>

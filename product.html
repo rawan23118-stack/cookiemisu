@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product - Cookiemisu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Playfair Display', serif;
+background:#efe6dc;
+color:#5a3a2e;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#f2eae4;
+border-bottom:1px solid #ddd;
+}
+
+.logo{
+font-weight:600;
+font-size:18px;
+}
+
+nav{
+display:flex;
+gap:25px;
+}
+
+nav a{
+text-decoration:none;
+color:#5a3a2e;
+font-weight:600;
+}
+
+.container{
+display:flex;
+flex-wrap:wrap;
+gap:50px;
+padding:60px 8%;
+align-items:center;
+}
+
+.product-images img{
+width:100%;
+height:350px;
+object-fit:cover;
+border-radius:14px;
+}
+
+.product-info{
+flex:1;
+}
+
+h1{
+font-size:30px;
+}
+
+.desc{
+color:#7a5a45;
+margin:15px 0;
+}
+
+.size-select{
+margin:20px 0;
+}
+
+.size-select select{
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.quantity-box{
+display:flex;
+align-items:center;
+gap:15px;
+margin:20px 0;
+}
+
+.quantity-box button{
+padding:8px 14px;
+background:#5c3b2e;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+margin:20px 0;
+}
+
+.order-btn{
+padding:14px;
+width:100%;
+background:#5c3b2e;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:8px;
+}
+
+.order-btn:hover{
+background:black;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">COOKIEMISU</div>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="menu.html">Menu</a>
+<a href="order.html">Orders</a>
+</nav>
+</header>
+
+<div class="container">
+
+<div class="product-images">
+<img id="img1">
+</div>
+
+<div class="product-info">
+
+<h1 id="name"></h1>
+<p class="desc" id="desc"></p>
+
+<!-- SIZE (فقط للتيراميسو) -->
+<div class="size-select" id="sizeBox" style="display:none;">
+<select id="size" onchange="updatePrice()">
+<option value="5">Small - 5 JD</option>
+<option value="12">Medium - 12 JD</option>
+<option value="20">Large - 20 JD</option>
+</select>
+</div>
+
+<!-- QUANTITY -->
+<div class="quantity-box">
+<button onclick="changeQty(-1)">-</button>
+<span id="qty">1</span>
+<button onclick="changeQty(1)">+</button>
+</div>
+
+<div class="price" id="totalPrice"></div>
+
+<button class="order-btn" onclick="goToOrder()">Add to Cart</button>
+
+</div>
+</div>
+
+<script>
+
+const products = {
+"Tiramisu Balls":{img1:"img/4.png",desc:"Tiramisu balls",price:3},
+"Dubai Chocolate":{img1:"img/6.png",desc:"Dubai chocolate",price:1},
+"Cinnamon Roll":{img1:"img/5.png",desc:"Cinnamon roll",price:1.5},
+"Blueberry Cookie":{img1:"img/3.png",desc:"Blueberry cookie",price:1.5},
+"Tiramisu Cookie":{img1:"img/1.png",desc:"Tiramisu cookie",price:2},
+"Classic Cookie":{img1:"img/7.png",desc:"Classic cookie",price:1},
+
+"Classic Tiramisu":{
+img1:"img/2.png",
+desc:"Tiramisu"
+}
+};
+
+let selected = localStorage.getItem("selectedProduct");
+let product = products[selected];
+
+if(!product){
+document.body.innerHTML = "<h2>No product</h2>";
+}
+
+/* عرض */
+document.getElementById("name").innerText = selected;
+document.getElementById("desc").innerText = product.desc;
+document.getElementById("img1").src = product.img1;
+
+/* فقط التيراميسو */
+if(selected === "Classic Tiramisu"){
+document.getElementById("sizeBox").style.display = "block";
+}
+
+let qty = 1;
+
+function getPrice(){
+
+if(selected === "Classic Tiramisu"){
+return Number(document.getElementById("size").value) * qty;
+}else{
+return product.price * qty;
+}
+
+}
+
+function changeQty(c){
+qty += c;
+if(qty < 1) qty = 1;
+
+document.getElementById("qty").innerText = qty;
+updatePrice();
+}
+
+function updatePrice(){
+document.getElementById("totalPrice").innerText = getPrice() + " JD";
+}
+
+/* 🔥 اضافة للكارت مع دمج */
+function goToOrder(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let item = {
+name:selected,
+quantity:qty
+};
+
+/* إذا تيراميسو */
+if(selected === "Classic Tiramisu"){
+item.size = document.getElementById("size").value;
+}
+
+/* 🔥 دمج المنتج */
+let existing = cart.find(p =>
+p.name === item.name && p.size === item.size
+);
+
+if(existing){
+existing.quantity += item.quantity;
+}else{
+cart.push(item);
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+window.location.href = "order.html";
+}
+
+updatePrice();
+
+</script>
+
+</body>
+</html>

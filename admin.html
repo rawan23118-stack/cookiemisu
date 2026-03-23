@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Orders</title>
+
+<style>
+body{
+font-family:Arial;
+padding:40px;
+background:#f6f1ec;
+}
+
+h1{
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+}
+
+th, td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+th{
+background:#5c3b2e;
+color:white;
+}
+
+button{
+padding:6px 10px;
+border:none;
+background:#5c3b2e;
+color:white;
+cursor:pointer;
+border-radius:5px;
+}
+
+.done{
+background:green;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Orders Dashboard</h1>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Product</th>
+<th>Size</th>
+<th>Qty</th>
+<th>Price</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="ordersTable"></tbody>
+
+</table>
+
+<script>
+
+function loadOrders(){
+
+fetch("http://localhost:3000/orders")
+.then(res => res.json())
+.then(data => {
+
+const table = document.getElementById("ordersTable");
+table.innerHTML = "";
+
+data.forEach(order => {
+
+table.innerHTML += `
+<tr>
+<td>${order.name}</td>
+<td>${order.phone}</td>
+<td>${order.product}</td>
+<td>${order.size}</td>
+<td>${order.quantity}</td>
+<td>${order.price} JD</td>
+<td>${order.status}</td>
+<td>
+${order.status === 'done' 
+? '<button class="done">Done</button>' 
+: `<button onclick="markDone(${order.id})">Mark as Done</button>`}
+</td>
+</tr>
+`;
+
+});
+
+});
+
+}
+
+function markDone(id){
+
+fetch(`http://localhost:3000/order/${id}`, {
+method: "PUT"
+})
+.then(res => res.text())
+.then(data => {
+loadOrders();
+});
+
+}
+
+loadOrders();
+
+</script>
+
+</body>
+</html>

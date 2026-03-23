@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Menu - Cookiemisu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Playfair Display', serif;
+}
+
+body{
+background:#f6f1ec;
+color:#5a3a2e;
+}
+
+/* HEADER */
+header{
+position:sticky;
+top:0;
+z-index:1000;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#f2eae4;
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+}
+
+nav{
+display:flex;
+gap:25px;
+}
+
+a{
+text-decoration:none;
+color:#7a5a45;
+transition:0.3s;
+}
+
+a:hover{
+color:#000;
+}
+
+/* TITLE */
+.title{
+text-align:center;
+padding:60px 20px 20px;
+}
+
+.title h1{
+font-size:40px;
+}
+
+/* SECTION */
+.menu-section{
+margin-bottom:50px;
+}
+
+/* SECTION TITLE */
+.section-title{
+font-size:26px;
+margin:40px 8% 10px;
+}
+
+/* GRID */
+.menu{
+padding:20px 8% 40px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:35px;
+}
+
+/* CARD */
+.card{
+background:white;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 12px 30px rgba(0,0,0,0.1);
+transition:0.3s;
+max-width:300px;
+margin:auto;
+position:relative;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+/* 🔥 الصورة الكبيرة زي المثال */
+.product-img{
+width:100%;
+height:260px;
+object-fit:cover;
+object-position:center;
+display:block;
+}
+
+/* BADGE */
+.badge{
+position:absolute;
+top:12px;
+left:12px;
+background:#5c3b2e;
+color:white;
+padding:6px 12px;
+font-size:12px;
+border-radius:6px;
+z-index:10;
+}
+
+.new{
+background:#000;
+}
+
+/* CONTENT */
+.card-content{
+padding:15px 18px 20px;
+text-align:center;
+}
+
+.card h3{
+margin-bottom:6px;
+font-size:18px;
+}
+
+.card p{
+font-size:14px;
+color:#7a5a45;
+margin-bottom:15px;
+}
+
+/* BUTTON */
+.card button{
+width:100%;
+padding:12px;
+border:none;
+background:#5c3b2e;
+color:white;
+cursor:pointer;
+transition:0.3s;
+border-radius:6px;
+font-size:14px;
+}
+
+.card button:hover{
+background:#000;
+transform:scale(1.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">COOKIEMISU</div>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="menu.html">Menu</a>
+<a href="#">Orders</a>
+<a href="https://www.instagram.com/cookiemisu/" target="_blank">Instagram</a>
+</nav>
+</header>
+
+<section class="title">
+<h1>Our Menu</h1>
+</section>
+
+<!-- COOKIES -->
+<section class="menu-section">
+<h2 class="section-title">Cookies</h2>
+
+<div class="menu">
+
+<div class="card">
+<div class="badge">Best Seller</div>
+<img src="img/1.png" class="product-img">
+<div class="card-content">
+<h3>Tiramisu Cookie</h3>
+<p>Soft cookie topped with creamy tiramisu & cocoa dust</p>
+<button onclick="goToProduct('Tiramisu Cookie')">View</button>
+</div>
+</div>
+
+<div class="card">
+<img src="img/3.png" class="product-img">
+<div class="card-content">
+<h3>Blueberry Cookie</h3>
+<p>Soft cookie filled with blueberries & white chocolate</p>
+<button onclick="goToProduct('Blueberry Cookie')">View</button>
+</div>
+</div>
+
+<div class="card">
+<img src="img/7.png" class="product-img">
+<div class="card-content">
+<h3>Classic Cookie</h3>
+<p>Soft baked cookie loaded with rich chocolate chips</p>
+<button onclick="goToProduct('Classic Cookie')">View</button>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- TIRAMISU -->
+<section class="menu-section">
+<h2 class="section-title">Tiramisu</h2>
+
+<div class="menu">
+
+<div class="card">
+<img src="img/2.png" class="product-img">
+<div class="card-content">
+<h3>Classic Tiramisu</h3>
+<p>Layers of coffee-soaked biscuits with creamy mascarpone & cocoa</p>
+<button onclick="goToProduct('Classic Tiramisu')">View</button>
+</div>
+</div>
+
+<div class="card">
+<div class="badge new">New</div>
+<img src="img/4.png" class="product-img">
+<div class="card-content">
+<h3>Tiramisu Balls</h3>
+<p>Creamy tiramisu bites dusted with rich cocoa</p>
+<button onclick="goToProduct('Tiramisu Balls')">View</button>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- CHOCOLATE -->
+<section class="menu-section">
+<h2 class="section-title">Chocolate</h2>
+
+<div class="menu">
+
+<div class="card">
+<img src="img/6.png" class="product-img">
+<div class="card-content">
+<h3>Dubai Chocolate</h3>
+<p>Milk chocolate filled with creamy pistachio center</p>
+<button onclick="goToProduct('Dubai Chocolate')">View</button>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- BAKERY -->
+<section class="menu-section">
+<h2 class="section-title">Bakery</h2>
+
+<div class="menu">
+
+<div class="card">
+<img src="img/5.png" class="product-img">
+<div class="card-content">
+<h3>Cinnamon Roll</h3>
+<p>Soft cinnamon roll topped with warm vanilla glaze</p>
+<button onclick="goToProduct('Cinnamon Roll')">View</button>
+</div>
+</div>
+
+</div>
+</section>
+
+<script>
+
+function goToProduct(product){
+localStorage.setItem("selectedProduct", product);
+window.location.href = "product.html";
+}
+
+</script>
+
+</body>
+</html>
