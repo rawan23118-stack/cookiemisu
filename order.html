@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-
 body{
 margin:0;
 font-family:'Playfair Display', serif;
@@ -126,7 +125,6 @@ color:white;
 padding:10px;
 border:none;
 }
-
 </style>
 </head>
 
@@ -135,14 +133,12 @@ border:none;
 <h1>Your Orders</h1>
 
 <div id="cart"></div>
-
 <div class="total" id="total"></div>
 
 <div class="form">
 <h3>Customer Info</h3>
 <input type="text" id="customerName" placeholder="Your Name">
 <input type="text" id="customerPhone" placeholder="Phone Number">
-<textarea id="customerNote" placeholder="Notes (optional)"></textarea>
 </div>
 
 <div class="actions">
@@ -164,38 +160,30 @@ const images = {
 "Classic Cookie":"img/7.png"
 };
 
-/* حساب السعر */
 function getPrice(item){
-
 if(item.name === "Classic Tiramisu"){
 return item.quantity * Number(item.size);
 }
-
 if(item.name === "Blueberry Cookie") return item.quantity * 1.5;
 if(item.name === "Classic Cookie") return item.quantity * 1;
 if(item.name === "Tiramisu Cookie") return item.quantity * 2;
 if(item.name === "Cinnamon Roll") return item.quantity * 1.5;
 if(item.name === "Tiramisu Balls") return item.quantity * 3;
-
 return item.quantity;
 }
 
 let container = document.getElementById("cart");
 
 function render(){
-
 container.innerHTML = "";
-
 let total = 0;
 
 cart.forEach((item,index)=>{
-
 item.price = getPrice(item);
 total += item.price;
 
 container.innerHTML += `
 <div class="item">
-
 <div class="left">
 <img src="${images[item.name]}">
 <div class="info">
@@ -206,7 +194,6 @@ ${item.size ? `<p>Size: ${item.size} JD</p>` : ""}
 </div>
 
 <div class="right">
-
 <div class="qty-box">
 <button onclick="changeQty(${index}, -1)">-</button>
 <span>${item.quantity}</span>
@@ -214,18 +201,13 @@ ${item.size ? `<p>Size: ${item.size} JD</p>` : ""}
 </div>
 
 <div class="price">${item.price} JD</div>
-
 <button class="delete" onclick="removeItem(${index})">Remove</button>
-
 </div>
-
 </div>
 `;
-
 });
 
 document.getElementById("total").innerText = "Total: " + total.toFixed(2) + " JD";
-
 localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -248,18 +230,21 @@ cart = [];
 render();
 }
 
-/* 🔥 الدالة المهمة */
 function checkout(){
 
 let name = document.getElementById("customerName").value;
 let phone = document.getElementById("customerPhone").value;
 
-if(name === "" || phone === ""){
-alert("Fill your info");
+if(!name || !phone){
+alert("Please fill your info");
 return;
 }
 
-fetch("http://localhost:3000/order", {
+cart.forEach(item=>{
+item.price = getPrice(item);
+});
+
+fetch("https://cookiemisu-2.onrender.com/order", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
@@ -267,18 +252,17 @@ headers: {
 body: JSON.stringify({
 name: name,
 phone: phone,
-note: document.getElementById("customerNote").value,
 cart: cart
 })
 })
 .then(res => res.text())
 .then(data => {
-alert("Order saved!");
-clearCart();
+alert("Order sent successfully");
+localStorage.removeItem("cart");
+window.location.reload();
 })
 .catch(err => {
 alert("Error sending order");
-console.log(err);
 });
 
 }
