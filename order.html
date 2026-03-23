@@ -99,7 +99,7 @@ padding:20px;
 border-radius:12px;
 }
 
-.form input, .form textarea{
+.form input{
 width:100%;
 padding:10px;
 margin:10px 0;
@@ -124,6 +124,7 @@ background:#5c3b2e;
 color:white;
 padding:10px;
 border:none;
+cursor:pointer;
 }
 </style>
 </head>
@@ -239,6 +240,11 @@ let phone = document.getElementById("customerPhone").value;
 
 if(!name || !phone){
 alert("Please fill your info");
+return;
+}
+
+if(cart.length === 0){
+alert("Cart is empty");
 return;
 }
 
