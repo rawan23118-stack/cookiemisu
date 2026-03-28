@@ -1,8 +1,6 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -10,68 +8,37 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const SECRET = "supersecretkey";
-
 // DB
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "",
-  database: process.env.DB_NAME || "cookiemisu"
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "cookiemisu"
 });
 
 db.connect(err => {
-  if (err) console.log(err);
-  else console.log("DB connected");
+  if (err) {
+    console.log("DB Error:", err);
+  } else {
+    console.log("Connected to DB");
+  }
 });
 
 
-// 🔐 LOGIN (secure)
-app.post("/login", async (req, res) => {
+// 🔐 LOGIN بسيط
+app.post("/login", (req, res) => {
 
   const { username, password } = req.body;
 
-  // 🔥 بدل ما تخزني password plain
-  const adminUser = "admin";
-  const hashedPassword = await bcrypt.hash("1234", 10);
-
-  if (username !== adminUser) {
-    return res.status(401).send("wrong");
+  if (username === "admin" && password === "1234") {
+    return res.send("ok");
   }
 
-  const match = await bcrypt.compare(password, hashedPassword);
-
-  if (!match) {
-    return res.status(401).send("wrong");
-  }
-
-  // 🔥 generate token
-  const token = jwt.sign({ user: username }, SECRET, { expiresIn: "2h" });
-
-  res.json({ token });
-
+  res.status(401).send("wrong");
 });
 
 
-// 🔒 middleware
-function verifyToken(req, res, next){
-
-  const auth = req.headers["authorization"];
-
-  if(!auth) return res.status(403).send("No token");
-
-  const token = auth.split(" ")[1];
-
-  jwt.verify(token, SECRET, (err, decoded)=>{
-    if(err) return res.status(403).send("Invalid token");
-    req.user = decoded;
-    next();
-  });
-
-}
-
-
-// 📥 ORDER
+// 📥 حفظ الطلب
 app.post("/order", (req, res) => {
 
   const { name, phone, cart } = req.body;
@@ -85,39 +52,59 @@ app.post("/order", (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, 'pending')
   `;
 
-  cart.forEach(item => {
-    db.query(sql, [
-      name,
-      phone,
-      item.name,
-      item.size || "",
-      item.quantity || 1,
-      item.price || 0
-    ]);
-  });
+  let completed = 0;
 
-  res.send("saved");
+  cart.forEach(item => {
+    db.query(
+      sql,
+      [
+        name,
+        phone,
+        item.name,
+        item.size || "",
+        item.quantity || 1,
+        item.price || 0
+      ],
+      (err) => {
+        if (err) {
+          return res.status(500).send("DB error");
+        }
+
+        completed++;
+        if (completed === cart.length) {
+          res.send("Order saved");
+        }
+      }
+    );
+  });
 });
 
 
-// 🔒 GET ORDERS
-app.get("/orders", verifyToken, (req, res) => {
+// 📤 عرض الطلبات (بدون حماية)
+app.get("/orders", (req, res) => {
 
   db.query("SELECT * FROM orders", (err, result) => {
-    if (err) return res.status(500).send("error");
+    if (err) {
+      return res.status(500).send("Error fetching");
+    }
     res.json(result);
   });
 
 });
 
 
-// 🔒 UPDATE
-app.put("/order/:id", verifyToken, (req, res) => {
+// 🔄 تحديث الحالة
+app.put("/order/:id", (req, res) => {
 
   db.query(
     "UPDATE orders SET status='done' WHERE id=?",
     [req.params.id],
-    () => res.send("updated")
+    (err) => {
+      if (err) {
+        return res.status(500).send("Error updating");
+      }
+      res.send("updated");
+    }
   );
 
 });
