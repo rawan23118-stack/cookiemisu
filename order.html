@@ -151,6 +151,8 @@ cursor:pointer;
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+const BASE_URL = "http://localhost:3000";
+
 const images = {
 "Tiramisu Cookie":"img/1.png",
 "Dubai Chocolate":"img/6.png",
@@ -233,8 +235,6 @@ render();
 
 function checkout(){
 
-console.log("CLICKED");
-
 let name = document.getElementById("customerName").value;
 let phone = document.getElementById("customerPhone").value;
 
@@ -252,7 +252,8 @@ cart.forEach(item=>{
 item.price = getPrice(item);
 });
 
-fetch("https://cookiemisu-5.onrender.com/order", {
+// 🔥 هون التعديل المهم
+fetch(`${BASE_URL}/order`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
@@ -264,12 +265,12 @@ cart: cart
 })
 })
 .then(res => res.text())
-.then(data => {
+.then(() => {
 alert("Order sent successfully");
 localStorage.removeItem("cart");
 window.location.reload();
 })
-.catch(err => {
+.catch(() => {
 alert("Error sending order");
 });
 
