@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Login</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#f6f1ec;
+font-family:Arial;
+}
+
+.box{
+background:white;
+padding:40px;
+border-radius:12px;
+width:300px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+h2{
+margin-bottom:25px;
+color:#5c3b2e;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:10px;
+background:#5c3b2e;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.error{
+color:red;
+font-size:14px;
+margin-top:10px;
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Admin Login</h2>
+
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<div class="error" id="error">Wrong username or password</div>
+
+</div>
+
+<script>
+
+const BASE_URL = "https://cookiemisu-5.onrender.com";
+
+function login(){
+
+const user = document.getElementById("username").value;
+const pass = document.getElementById("password").value;
+const error = document.getElementById("error");
+
+error.style.display = "none";
+
+if(!user || !pass){
+  error.innerText = "Enter all fields";
+  error.style.display = "block";
+  return;
+}
+
+fetch(`${BASE_URL}/login`, {
+method: "POST",
+headers: {
+  "Content-Type": "application/json"
+},
+body: JSON.stringify({
+  username: user,
+  password: pass
+})
+})
+.then(res => {
+  if(!res.ok) throw new Error();
+  return res.text();
+})
+.then(() => {
+  window.location.href = "admin.html";
+})
+.catch(() => {
+  error.innerText = "Wrong username or password";
+  error.style.display = "block";
+});
+
+}
+
+</script>
+
+</body>
+</html>
