@@ -44,13 +44,26 @@ border-radius:5px;
 .done{
 background:green;
 }
+
+.top-bar{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.logout{
+background:red;
+}
 </style>
 
 </head>
 
 <body>
 
+<div class="top-bar">
 <h1>Orders Dashboard</h1>
+<button class="logout" onclick="logout()">Logout</button>
+</div>
 
 <table>
 <thead>
@@ -71,52 +84,96 @@ background:green;
 
 <script>
 
+const BASE_URL = "https://cookiemisu-5.onrender.com";
+
+// تحميل الطلبات
 function loadOrders(){
 
-fetch("https://cookiemisu-5.onrender.com/orders")
-.then(res => res.json())
+const table = document.getElementById("ordersTable");
+
+table.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
+
+fetch(`${BASE_URL}/orders`)
+.then(res => {
+  if(res.status === 403){
+    window.location.href = "login.html";
+    return;
+  }
+  if(!res.ok) throw new Error("error");
+  return res.json();
+})
 .then(data => {
 
-const table = document.getElementById("ordersTable");
-table.innerHTML = "";
+  if(!data) return;
 
-data.forEach(order => {
+  table.innerHTML = "";
 
-table.innerHTML += `
-<tr>
-<td>${order.name}</td>
-<td>${order.phone}</td>
-<td>${order.product}</td>
-<td>${order.size}</td>
-<td>${order.quantity}</td>
-<td>${order.price} JD</td>
-<td>${order.status}</td>
-<td>
-${order.status === 'done' 
-? '<button class="done">Done</button>' 
-: `<button onclick="markDone(${order.id})">Mark as Done</button>`}
-</td>
-</tr>
-`;
+  if(data.length === 0){
+    table.innerHTML = "<tr><td colspan='8'>No orders</td></tr>";
+    return;
+  }
 
-});
+  data.forEach(order => {
 
+    table.innerHTML += `
+    <tr>
+    <td>${order.name}</td>
+    <td>${order.phone}</td>
+    <td>${order.product}</td>
+    <td>${order.size}</td>
+    <td>${order.quantity}</td>
+    <td>${order.price} JD</td>
+    <td>${order.status}</td>
+    <td>
+    ${
+      order.status === 'done'
+      ? '<button class="done">Done</button>'
+      : `<button onclick="markDone(${order.id})">Mark as Done</button>`
+    }
+    </td>
+    </tr>
+    `;
+  });
+
+})
+.catch(err => {
+  console.log(err);
+  table.innerHTML = "<tr><td colspan='8'>Error loading orders</td></tr>";
 });
 
 }
 
+// تغيير الحالة
 function markDone(id){
 
-fetch(`https://cookiemisu-5.onrender.com/order/${id}`, {
+fetch(`${BASE_URL}/order/${id}`, {
 method: "PUT"
 })
-.then(res => res.text())
-.then(data => {
-loadOrders();
+.then(res => {
+  if(res.status === 403){
+    window.location.href = "login.html";
+    return;
+  }
+  if(!res.ok) throw new Error("fail");
+  return res.text();
+})
+.then(() => {
+  loadOrders();
+})
+.catch(err => {
+  console.log(err);
+  alert("Update failed");
 });
 
 }
 
+// تسجيل الخروج (بسيط)
+function logout(){
+alert("Logged out");
+window.location.href = "login.html";
+}
+
+// تشغيل الصفحة
 loadOrders();
 
 </script>
