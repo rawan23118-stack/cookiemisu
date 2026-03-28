@@ -86,14 +86,6 @@ background:red;
 
 const BASE_URL = "https://cookiemisu-5.onrender.com";
 
-// 🔥 جيب التوكن
-const token = localStorage.getItem("token");
-
-// ❌ اذا ما في توكن → برا
-if(!token){
-  window.location.href = "login.html";
-}
-
 // تحميل الطلبات
 function loadOrders(){
 
@@ -101,26 +93,12 @@ const table = document.getElementById("ordersTable");
 
 table.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
 
-fetch(`${BASE_URL}/orders`, {
-headers: {
-  Authorization: "Bearer " + token
-}
-})
+fetch(`${BASE_URL}/orders`)
 .then(res => {
-
-  if(res.status === 403){
-    localStorage.removeItem("token");
-    window.location.href = "login.html";
-    return;
-  }
-
   if(!res.ok) throw new Error("error");
-
   return res.json();
 })
 .then(data => {
-
-  if(!data) return;
 
   table.innerHTML = "";
 
@@ -163,21 +141,10 @@ headers: {
 function markDone(id){
 
 fetch(`${BASE_URL}/order/${id}`, {
-method: "PUT",
-headers: {
-  Authorization: "Bearer " + token
-}
+method: "PUT"
 })
 .then(res => {
-
-  if(res.status === 403){
-    localStorage.removeItem("token");
-    window.location.href = "login.html";
-    return;
-  }
-
   if(!res.ok) throw new Error("fail");
-
   return res.text();
 })
 .then(() => {
@@ -190,9 +157,8 @@ headers: {
 
 }
 
-// logout حقيقي
+// logout بسيط
 function logout(){
-localStorage.removeItem("token");
 window.location.href = "login.html";
 }
 
