@@ -77,29 +77,43 @@ display:none;
 <div class="error" id="error">Wrong username or password</div>
 
 </div>
+
 <script>
 
 const BASE_URL = "http://localhost:3000";
 
 function login(){
 
+const user = document.getElementById("username").value;
+const pass = document.getElementById("password").value;
+const error = document.getElementById("error");
+
+error.style.display = "none";
+
+if(!user || !pass){
+  error.innerText = "Enter all fields";
+  error.style.display = "block";
+  return;
+}
+
 fetch(`${BASE_URL}/login`, {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
-  username: username.value,
-  password: password.value
+  username: user,
+  password: pass
 })
 })
-.then(res => res.json())
-.then(data => {
-
-  // 🔥 خزني التوكن
-  localStorage.setItem("token", data.token);
-
+.then(res => {
+  if(!res.ok) throw new Error();
+  return res.text(); // 🔥 مش json
+})
+.then(() => {
   window.location.href = "admin.html";
 })
-.catch(()=> alert("wrong"));
+.catch(() => {
+  error.style.display = "block";
+});
 
 }
 
