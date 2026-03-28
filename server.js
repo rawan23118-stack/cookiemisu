@@ -1,6 +1,8 @@
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -8,24 +10,69 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
+const SECRET = "supersecretkey";
+
+// DB
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST || process.env.DB_HOST,
-  user: process.env.MYSQLUSER || process.env.DB_USER,
-  password: process.env.MYSQLPASSWORD || process.env.DB_PASS,
-  database: process.env.MYSQLDATABASE || process.env.DB_NAME,
-  port: process.env.MYSQLPORT || process.env.DB_PORT
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASS || "",
+  database: process.env.DB_NAME || "cookiemisu"
 });
 
 db.connect(err => {
-  if (err) {
-    console.log("❌ DB Error:", err);
-  } else {
-    console.log("✅ Connected to DB");
-  }
+  if (err) console.log(err);
+  else console.log("DB connected");
 });
 
+
+// 🔐 LOGIN (secure)
+app.post("/login", async (req, res) => {
+
+  const { username, password } = req.body;
+
+  // 🔥 بدل ما تخزني password plain
+  const adminUser = "admin";
+  const hashedPassword = await bcrypt.hash("1234", 10);
+
+  if (username !== adminUser) {
+    return res.status(401).send("wrong");
+  }
+
+  const match = await bcrypt.compare(password, hashedPassword);
+
+  if (!match) {
+    return res.status(401).send("wrong");
+  }
+
+  // 🔥 generate token
+  const token = jwt.sign({ user: username }, SECRET, { expiresIn: "2h" });
+
+  res.json({ token });
+
+});
+
+
+// 🔒 middleware
+function verifyToken(req, res, next){
+
+  const auth = req.headers["authorization"];
+
+  if(!auth) return res.status(403).send("No token");
+
+  const token = auth.split(" ")[1];
+
+  jwt.verify(token, SECRET, (err, decoded)=>{
+    if(err) return res.status(403).send("Invalid token");
+    req.user = decoded;
+    next();
+  });
+
+}
+
+
+// 📥 ORDER
 app.post("/order", (req, res) => {
-  console.log("BODY:", req.body);
 
   const { name, phone, cart } = req.body;
 
@@ -38,68 +85,42 @@ app.post("/order", (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, 'pending')
   `;
 
-  let completed = 0;
-  let sent = false;
-
   cart.forEach(item => {
-    console.log("ITEM:", item);
-
-    db.query(
-      sql,
-      [
-        name,
-        phone,
-        item.name || "",
-        item.size || "",
-        item.quantity || 1,
-        item.price || 0
-      ],
-      (err) => {
-        if (sent) return;
-
-        if (err) {
-          console.log("❌ Insert Error:", err);
-          sent = true;
-          return res.status(500).send("Database error");
-        }
-
-        completed++;
-
-        if (completed === cart.length) {
-          sent = true;
-          res.send("✅ Order saved");
-        }
-      }
-    );
+    db.query(sql, [
+      name,
+      phone,
+      item.name,
+      item.size || "",
+      item.quantity || 1,
+      item.price || 0
+    ]);
   });
+
+  res.send("saved");
 });
 
-app.get("/orders", (req, res) => {
+
+// 🔒 GET ORDERS
+app.get("/orders", verifyToken, (req, res) => {
+
   db.query("SELECT * FROM orders", (err, result) => {
-    if (err) {
-      console.log("❌ Fetch Error:", err);
-      return res.status(500).send("Error fetching");
-    }
+    if (err) return res.status(500).send("error");
     res.json(result);
   });
+
 });
 
-app.put("/order/:id", (req, res) => {
-  const id = req.params.id;
+
+// 🔒 UPDATE
+app.put("/order/:id", verifyToken, (req, res) => {
 
   db.query(
     "UPDATE orders SET status='done' WHERE id=?",
-    [id],
-    (err) => {
-      if (err) {
-        console.log("❌ Update Error:", err);
-        return res.status(500).send("Error updating");
-      }
-      res.send("updated");
-    }
+    [req.params.id],
+    () => res.send("updated")
   );
+
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("🚀 Server running");
-});
+
+app.listen(3000, () => console.log("Server running"));
