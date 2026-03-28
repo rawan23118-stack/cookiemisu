@@ -84,26 +84,28 @@ background:red;
 
 <script>
 
-const BASE_URL = "https://cookiemisu-5.onrender.com";
+const BASE_URL = "http://localhost:3000";
 
 // تحميل الطلبات
 function loadOrders(){
 
 const table = document.getElementById("ordersTable");
 
+// loading
 table.innerHTML = "<tr><td colspan='8'>Loading...</td></tr>";
 
 fetch(`${BASE_URL}/orders`)
 .then(res => {
-  if(!res.ok) throw new Error("error");
+  if(!res.ok) throw new Error("Server error");
   return res.json();
 })
 .then(data => {
 
   table.innerHTML = "";
 
-  if(data.length === 0){
-    table.innerHTML = "<tr><td colspan='8'>No orders</td></tr>";
+  // اذا ما في بيانات
+  if(!data || data.length === 0){
+    table.innerHTML = "<tr><td colspan='8'>No orders found</td></tr>";
     return;
   }
 
@@ -131,7 +133,7 @@ fetch(`${BASE_URL}/orders`)
 
 })
 .catch(err => {
-  console.log(err);
+  console.error(err);
   table.innerHTML = "<tr><td colspan='8'>Error loading orders</td></tr>";
 });
 
@@ -144,25 +146,25 @@ fetch(`${BASE_URL}/order/${id}`, {
 method: "PUT"
 })
 .then(res => {
-  if(!res.ok) throw new Error("fail");
+  if(!res.ok) throw new Error("Update failed");
   return res.text();
 })
 .then(() => {
-  loadOrders();
+  loadOrders(); // refresh
 })
 .catch(err => {
-  console.log(err);
+  console.error(err);
   alert("Update failed");
 });
 
 }
 
-// logout بسيط
+// logout
 function logout(){
 window.location.href = "login.html";
 }
 
-// تشغيل
+// تشغيل الصفحة
 loadOrders();
 
 </script>
