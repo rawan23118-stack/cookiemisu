@@ -256,7 +256,6 @@ Order Now
 <!-- 🔥 SCRIPT الصح -->
 <script>
 
-// 🛒 إضافة للكارت
 function addToCart(name, price){
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -270,19 +269,29 @@ function addToCart(name, price){
 
   localStorage.setItem("cart", JSON.stringify(cart));
 
+  console.log("Cart:", cart);
+
   alert("Added to cart");
-
-  // مباشرة على الطلب
-  window.location.href = "order.html";
 }
 
 
-// 🔗 زر Orders
+// 🔗 الذهاب لصفحة الطلب
 function goToOrder(){
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // ❌ إذا فاضي
+  if(cart.length === 0){
+    alert("Cart is empty");
+    return;
+  }
+
   window.location.href = "order.html";
 }
+
 
 </script>
+  
 
 </body>
 </html>
