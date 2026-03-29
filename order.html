@@ -7,28 +7,37 @@
 
 <body>
 
-<h2>Place Order</h2>
+<h2>Your Order</h2>
+
+<div id="cartBox"></div>
+
+<br>
 
 <input id="name" placeholder="Your Name"><br><br>
 <input id="phone" placeholder="Phone"><br><br>
 
-<button onclick="sendOrder()">Send Order</button>
+<button onclick="sendOrder()">Confirm Order</button>
 
 <script>
 
+// 📦 جلب الكارت
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const box = document.getElementById("cartBox");
+
+// عرض الطلب
+cart.forEach(item => {
+  box.innerHTML += `
+    <p>${item.name} - ${item.size} - ${item.price} JD</p>
+  `;
+});
+
+
+// 🚀 إرسال الطلب
 function sendOrder(){
 
   const name = document.getElementById("name").value;
   const phone = document.getElementById("phone").value;
-
-  const cart = [
-    {
-      name: "Tiramisu",
-      size: "Medium",
-      quantity: 1,
-      price: 12
-    }
-  ];
 
   fetch("http://localhost:3000/order", {
     method: "POST",
