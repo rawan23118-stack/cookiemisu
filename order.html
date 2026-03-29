@@ -2,280 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Orders - Cookiemisu</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-
-<style>
-body{
-margin:0;
-font-family:'Playfair Display', serif;
-background:#f6f1ec;
-color:#5a3a2e;
-padding:40px 10%;
-}
-
-h1{
-text-align:center;
-margin-bottom:40px;
-}
-
-.item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:white;
-padding:15px 20px;
-border-radius:12px;
-margin-bottom:15px;
-}
-
-.left{
-display:flex;
-gap:15px;
-align-items:center;
-}
-
-.left img{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.info h3{
-margin:0;
-}
-
-.info p{
-margin:3px 0;
-font-size:13px;
-color:#7a5a45;
-}
-
-.right{
-text-align:right;
-}
-
-.qty-box{
-display:flex;
-gap:10px;
-justify-content:flex-end;
-margin-bottom:5px;
-}
-
-.qty-box button{
-padding:5px 10px;
-border:none;
-background:#5c3b2e;
-color:white;
-cursor:pointer;
-border-radius:4px;
-}
-
-.price{
-font-weight:bold;
-}
-
-.delete{
-background:none;
-border:none;
-color:#999;
-cursor:pointer;
-margin-top:5px;
-}
-
-.total{
-margin-top:30px;
-text-align:right;
-font-size:20px;
-font-weight:bold;
-}
-
-.form{
-margin-top:40px;
-background:white;
-padding:20px;
-border-radius:12px;
-}
-
-.form input{
-width:100%;
-padding:10px;
-margin:10px 0;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-.actions{
-margin-top:20px;
-display:flex;
-justify-content:space-between;
-}
-
-.clear-btn{
-background:#ccc;
-padding:10px;
-border:none;
-}
-
-.checkout-btn{
-background:#5c3b2e;
-color:white;
-padding:10px;
-border:none;
-cursor:pointer;
-}
-</style>
+<title>Order</title>
 </head>
 
 <body>
 
-<h1>Your Orders</h1>
+<h2>Place Order</h2>
 
-<div id="cart"></div>
-<div class="total" id="total"></div>
+<input id="name" placeholder="Your Name"><br><br>
+<input id="phone" placeholder="Phone"><br><br>
 
-<div class="form">
-<h3>Customer Info</h3>
-<input type="text" id="customerName" placeholder="Your Name">
-<input type="text" id="customerPhone" placeholder="Phone Number">
-</div>
-
-<div class="actions">
-<button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-<button class="checkout-btn" onclick="checkout()">Confirm Order</button>
-</div>
+<button onclick="sendOrder()">Send Order</button>
 
 <script>
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+function sendOrder(){
 
-const BASE_URL = "http://localhost/cookiemisu";
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
 
-const images = {
-"Tiramisu Cookie":"img/1.png",
-"Dubai Chocolate":"img/6.png",
-"Classic Tiramisu":"img/2.png",
-"Blueberry Cookie":"img/3.png",
-"Cinnamon Roll":"img/5.png",
-"Tiramisu Balls":"img/4.png",
-"Classic Cookie":"img/7.png"
-};
+  const cart = [
+    {
+      name: "Tiramisu",
+      size: "Medium",
+      quantity: 1,
+      price: 12
+    }
+  ];
 
-function getPrice(item){
-if(item.name === "Classic Tiramisu"){
-return item.quantity * Number(item.size);
-}
-if(item.name === "Blueberry Cookie") return item.quantity * 1.5;
-if(item.name === "Classic Cookie") return item.quantity * 1;
-if(item.name === "Tiramisu Cookie") return item.quantity * 2;
-if(item.name === "Cinnamon Roll") return item.quantity * 1.5;
-if(item.name === "Tiramisu Balls") return item.quantity * 3;
-return item.quantity;
-}
-
-let container = document.getElementById("cart");
-
-function render(){
-container.innerHTML = "";
-let total = 0;
-
-cart.forEach((item,index)=>{
-item.price = getPrice(item);
-total += item.price;
-
-container.innerHTML += `
-<div class="item">
-<div class="left">
-<img src="${images[item.name]}">
-<div class="info">
-<h3>${item.name}</h3>
-<p>Qty: ${item.quantity}</p>
-${item.size ? `<p>Size: ${item.size} JD</p>` : ""}
-</div>
-</div>
-
-<div class="right">
-<div class="qty-box">
-<button onclick="changeQty(${index}, -1)">-</button>
-<span>${item.quantity}</span>
-<button onclick="changeQty(${index}, 1)">+</button>
-</div>
-
-<div class="price">${item.price} JD</div>
-<button class="delete" onclick="removeItem(${index})">Remove</button>
-</div>
-</div>
-`;
-});
-
-document.getElementById("total").innerText = "Total: " + total.toFixed(2) + " JD";
-localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function changeQty(i, change){
-cart[i].quantity += change;
-if(cart[i].quantity < 1){
-cart.splice(i,1);
-}
-render();
-}
-
-function removeItem(i){
-cart.splice(i,1);
-render();
-}
-
-function clearCart(){
-localStorage.removeItem("cart");
-cart = [];
-render();
-}
-
-function checkout(){
-
-let name = document.getElementById("customerName").value;
-let phone = document.getElementById("customerPhone").value;
-
-if(!name || !phone){
-alert("Fill your info");
-return;
-}
-
-if(cart.length === 0){
-alert("Cart empty");
-return;
-}
-
-cart.forEach(item=>{
-item.price = getPrice(item);
-});
-
-fetch(`${BASE_URL}/order.php`, {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-name: name,
-phone: phone,
-cart: cart
-})
-})
-.then(res => res.text())
-.then(() => {
-alert("Order saved");
-localStorage.removeItem("cart");
-window.location.reload();
-})
-.catch(() => {
-alert("Error");
-});
+  fetch("http://localhost:3000/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name,
+      phone,
+      cart
+    })
+  })
+  .then(res => res.text())
+  .then(data => {
+    alert(data);
+  });
 
 }
-
-render();
 
 </script>
 
