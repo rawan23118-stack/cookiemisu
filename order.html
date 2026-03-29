@@ -2,60 +2,304 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Order</title>
+<title>Orders - Cookiemisu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+font-family:'Playfair Display', serif;
+background:#f6f1ec;
+color:#5a3a2e;
+padding:40px 10%;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+}
+
+.empty{
+text-align:center;
+margin-top:50px;
+color:#999;
+}
+
+/* ITEM */
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+padding:15px 20px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.left{
+display:flex;
+gap:15px;
+align-items:center;
+}
+
+.left img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.info h3{
+margin:0;
+}
+
+.info p{
+margin:3px 0;
+font-size:13px;
+color:#7a5a45;
+}
+
+.right{
+text-align:right;
+}
+
+.qty-box{
+display:flex;
+gap:10px;
+justify-content:flex-end;
+margin-bottom:5px;
+}
+
+.qty-box button{
+padding:5px 10px;
+border:none;
+background:#5c3b2e;
+color:white;
+cursor:pointer;
+border-radius:4px;
+}
+
+.price{
+font-weight:bold;
+}
+
+.delete{
+background:none;
+border:none;
+color:#999;
+cursor:pointer;
+margin-top:5px;
+}
+
+.total{
+margin-top:30px;
+text-align:right;
+font-size:20px;
+font-weight:bold;
+}
+
+/* FORM */
+.form{
+margin-top:40px;
+background:white;
+padding:20px;
+border-radius:12px;
+}
+
+.form input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+.actions{
+margin-top:20px;
+display:flex;
+justify-content:space-between;
+}
+
+.clear-btn{
+background:#ccc;
+padding:10px;
+border:none;
+cursor:pointer;
+}
+
+.checkout-btn{
+background:#5c3b2e;
+color:white;
+padding:10px;
+border:none;
+cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-<h2>Your Order</h2>
+<h1>Your Orders</h1>
 
-<div id="cartBox"></div>
+<div id="cart"></div>
+<div class="total" id="total"></div>
 
-<br>
+<div class="form">
+<h3>Customer Info</h3>
+<input type="text" id="customerName" placeholder="Your Name">
+<input type="text" id="customerPhone" placeholder="Phone Number">
+</div>
 
-<input id="name" placeholder="Your Name"><br><br>
-<input id="phone" placeholder="Phone"><br><br>
-
-<button onclick="sendOrder()">Confirm Order</button>
+<div class="actions">
+<button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+<button class="checkout-btn" onclick="checkout()">Confirm Order</button>
+</div>
 
 <script>
 
-// 📦 جلب الكارت
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const box = document.getElementById("cartBox");
+const images = {
+"Tiramisu Cookie":"img/1.png",
+"Dubai Chocolate":"img/6.png",
+"Classic Tiramisu":"img/2.png",
+"Blueberry Cookie":"img/3.png",
+"Cinnamon Roll":"img/5.png",
+"Tiramisu Balls":"img/4.png",
+"Classic Cookie":"img/7.png"
+};
 
-// عرض الطلب
-cart.forEach(item => {
-  box.innerHTML += `
-    <p>${item.name} - ${item.size} - ${item.price} JD</p>
-  `;
+// 🔴 تسعير واضح (بدل التخبيص)
+function getUnitPrice(item){
+
+if(item.name === "Classic Tiramisu"){
+  return Number(item.size) || 12;
+}
+
+if(item.name === "Dubai Chocolate") return 15;
+if(item.name === "Tiramisu Cookie") return 12;
+if(item.name === "Classic Cookie") return 1;
+if(item.name === "Blueberry Cookie") return 1.5;
+if(item.name === "Cinnamon Roll") return 1.5;
+if(item.name === "Tiramisu Balls") return 3;
+
+return item.price || 0;
+}
+
+function getTotalPrice(item){
+return getUnitPrice(item) * item.quantity;
+}
+
+let container = document.getElementById("cart");
+
+function render(){
+
+container.innerHTML = "";
+let total = 0;
+
+// 🔴 إذا الكارت فاضي
+if(cart.length === 0){
+container.innerHTML = `<div class="empty">Cart is empty</div>`;
+document.getElementById("total").innerText = "";
+return;
+}
+
+cart.forEach((item,index)=>{
+
+let price = getTotalPrice(item);
+total += price;
+
+container.innerHTML += `
+<div class="item">
+<div class="left">
+<img src="${images[item.name] || 'img/1.png'}">
+<div class="info">
+<h3>${item.name}</h3>
+<p>Qty: ${item.quantity}</p>
+${item.size ? `<p>Size: ${item.size}</p>` : ""}
+</div>
+</div>
+
+<div class="right">
+<div class="qty-box">
+<button onclick="changeQty(${index}, -1)">-</button>
+<span>${item.quantity}</span>
+<button onclick="changeQty(${index}, 1)">+</button>
+</div>
+
+<div class="price">${price} JD</div>
+<button class="delete" onclick="removeItem(${index})">Remove</button>
+</div>
+</div>
+`;
 });
 
+document.getElementById("total").innerText = "Total: " + total.toFixed(2) + " JD";
 
-// 🚀 إرسال الطلب
-function sendOrder(){
+localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
+function changeQty(i, change){
+cart[i].quantity += change;
 
-  fetch("http://localhost:3000/order", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      name,
-      phone,
-      cart
-    })
-  })
-  .then(res => res.text())
-  .then(data => {
-    alert(data);
-  });
+if(cart[i].quantity < 1){
+cart.splice(i,1);
+}
+
+render();
+}
+
+function removeItem(i){
+cart.splice(i,1);
+render();
+}
+
+function clearCart(){
+localStorage.removeItem("cart");
+cart = [];
+render();
+}
+
+function checkout(){
+
+let name = document.getElementById("customerName").value.trim();
+let phone = document.getElementById("customerPhone").value.trim();
+
+if(!name || !phone){
+alert("Fill your info");
+return;
+}
+
+if(cart.length === 0){
+alert("Cart empty");
+return;
+}
+
+fetch("http://localhost:3000/order", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+name,
+phone,
+cart
+})
+})
+.then(res => res.text())
+.then(() => {
+alert("Order sent ✅");
+localStorage.removeItem("cart");
+window.location.reload();
+})
+.catch(() => {
+alert("Server error ❌");
+});
 
 }
+
+render();
 
 </script>
 
