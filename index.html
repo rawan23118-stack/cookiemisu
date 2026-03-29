@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -47,6 +46,7 @@ text-decoration:none;
 color:#7a5a45;
 transition:0.3s;
 font-weight:600;
+cursor:pointer;
 }
 
 a:hover{
@@ -131,7 +131,6 @@ object-fit:cover;
 border-radius:10px;
 }
 
-/* BADGE */
 .badge{
 position:absolute;
 top:10px;
@@ -169,38 +168,23 @@ border-radius:6px;
 background:#000;
 }
 
-/* WHY US */
+/* باقي السكشنات نفسهم */
 .why{
 background:#f2eae4;
 padding:70px;
 text-align:center;
 }
 
-.why div{
-margin:12px 0;
-font-size:15px;
-}
-
-/* REVIEWS */
 .reviews{
 padding:70px;
 text-align:center;
 }
 
-.review{
-margin:20px auto;
-max-width:500px;
-font-style:italic;
-}
-
-/* FOOTER */
 footer{
 text-align:center;
 padding:20px;
 background:#f2eae4;
-font-size:14px;
 }
-
 </style>
 
 </head>
@@ -213,7 +197,10 @@ font-size:14px;
 <nav>
 <a href="index.html">Home</a>
 <a href="menu.html">Menu</a>
-<a href="#">Orders</a>
+
+<!-- 🔥 صار يشتغل -->
+<a onclick="goToOrder()">Orders</a>
+
 <a href="https://www.instagram.com/cookiemisu/" target="_blank">Instagram</a>
 </nav>
 </header>
@@ -242,53 +229,59 @@ Order Now
 <img src="img/1.png">
 <h3>Tiramisu Cookie</h3>
 <p>Crispy outside, creamy inside</p>
-<button onclick="goToProduct('Tiramisu Cookie')">Order</button>
+<button onclick="addToCart('Tiramisu Cookie',12)">Order</button>
 </div>
 
 <div class="card">
 <img src="img/6.png">
 <h3>Dubai Chocolate</h3>
 <p>Rich and indulgent flavor</p>
-<button onclick="goToProduct('Dubai Chocolate')">Order</button>
+<button onclick="addToCart('Dubai Chocolate',15)">Order</button>
 </div>
 
 <div class="card">
 <img src="img/2.png">
 <h3>Classic Tiramisu</h3>
 <p>Authentic Italian taste</p>
-<button onclick="goToProduct('Classic Tiramisu')">Order</button>
+<button onclick="addToCart('Classic Tiramisu',12)">Order</button>
 </div>
 
 </div>
-</section>
-
-<!-- WHY US -->
-<section class="why">
-<h2>Why Cookiemisu?</h2>
-<div>Freshly made daily</div>
-<div>Premium ingredients only</div>
-<div>Limited batches for quality</div>
-</section>
-
-<!-- REVIEWS -->
-<section class="reviews">
-<h2>What People Say</h2>
-
-<div class="review">“Best tiramisu cookies I’ve ever tried!”</div>
-<div class="review">“Perfect balance between sweet and creamy.”</div>
-
 </section>
 
 <footer>
 © Cookiemisu
 </footer>
 
-<!-- 🔥 SCRIPT -->
+<!-- 🔥 SCRIPT الصح -->
 <script>
-function goToProduct(product){
-localStorage.setItem("selectedProduct", product);
-window.location.href = "product.html";
+
+// 🛒 إضافة للكارت
+function addToCart(name, price){
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  cart.push({
+    name: name,
+    size: "Medium",
+    quantity: 1,
+    price: price
+  });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("Added to cart");
+
+  // مباشرة على الطلب
+  window.location.href = "order.html";
 }
+
+
+// 🔗 زر Orders
+function goToOrder(){
+  window.location.href = "order.html";
+}
+
 </script>
 
 </body>
