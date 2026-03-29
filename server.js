@@ -8,37 +8,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-
-// ✅ اتصال الداتا بيس (عدلي الاسم صح)
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "cookiemisu1" // ← نفس اللي بالصورة عندك
+  database: "cookiemisu1"
 });
 
 db.connect(err => {
   if (err) {
-    console.log("DB Error:", err);
+    console.log(err);
   } else {
     console.log("Connected to DB");
   }
 });
 
-
-// 🔐 LOGIN
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  if (username === "admin" && password === "1234") {
-    return res.send("ok");
-  }
-
-  res.status(401).send("wrong");
-});
-
-
-// 📥 حفظ الطلب
 app.post("/order", (req, res) => {
 
   const { name, phone, cart } = req.body;
@@ -61,12 +45,13 @@ app.post("/order", (req, res) => {
       [
         name,
         phone,
-        item.name,        // اسم المنتج
+        item.name,
         item.size || "",
         item.quantity || 1,
         item.price || 0
       ],
       (err) => {
+
         if (err) {
           console.log(err);
           return res.status(500).send("DB error");
@@ -77,6 +62,7 @@ app.post("/order", (req, res) => {
         if (completed === cart.length) {
           res.send("Order saved");
         }
+
       }
     );
 
@@ -84,27 +70,4 @@ app.post("/order", (req, res) => {
 
 });
 
-
-// 📤 عرض الطلبات
-app.get("/orders", (req, res) => {
-  db.query("SELECT * FROM orders", (err, result) => {
-    if (err) return res.status(500).send("Error fetching");
-    res.json(result);
-  });
-});
-
-
-// 🔄 تحديث الحالة
-app.put("/order/:id", (req, res) => {
-  db.query(
-    "UPDATE orders SET status='done' WHERE id=?",
-    [req.params.id],
-    (err) => {
-      if (err) return res.status(500).send("Error updating");
-      res.send("updated");
-    }
-  );
-});
-
-
-app.listen(3000, () => console.log("Server running on 3000"));
+app.listen(3000, () => console.log("Server running"));
