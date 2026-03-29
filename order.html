@@ -151,7 +151,7 @@ cursor:pointer;
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost/cookiemisu";
 
 const images = {
 "Tiramisu Cookie":"img/1.png",
@@ -239,12 +239,12 @@ let name = document.getElementById("customerName").value;
 let phone = document.getElementById("customerPhone").value;
 
 if(!name || !phone){
-alert("Please fill your info");
+alert("Fill your info");
 return;
 }
 
 if(cart.length === 0){
-alert("Cart is empty");
+alert("Cart empty");
 return;
 }
 
@@ -252,8 +252,7 @@ cart.forEach(item=>{
 item.price = getPrice(item);
 });
 
-// 🔥 هون التعديل المهم
-fetch(`${BASE_URL}/order`, {
+fetch(`${BASE_URL}/order.php`, {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
@@ -266,12 +265,12 @@ cart: cart
 })
 .then(res => res.text())
 .then(() => {
-alert("Order sent successfully");
+alert("Order saved");
 localStorage.removeItem("cart");
 window.location.reload();
 })
 .catch(() => {
-alert("Error sending order");
+alert("Error");
 });
 
 }
