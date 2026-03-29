@@ -13,7 +13,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "cookiemisu"
+  database: "cookiemisu1"
 });
 
 db.connect(err => {
@@ -25,20 +25,7 @@ db.connect(err => {
 });
 
 
-// 🔐 LOGIN بسيط
-app.post("/login", (req, res) => {
-
-  const { username, password } = req.body;
-
-  if (username === "admin" && password === "1234") {
-    return res.send("ok");
-  }
-
-  res.status(401).send("wrong");
-});
-
-
-// 📥 حفظ الطلب
+// حفظ الطلب
 app.post("/order", (req, res) => {
 
   const { name, phone, cart } = req.body;
@@ -61,12 +48,13 @@ app.post("/order", (req, res) => {
         name,
         phone,
         item.name,
-        item.size || "",
-        item.quantity || 1,
-        item.price || 0
+        item.size,
+        item.quantity,
+        item.price
       ],
       (err) => {
         if (err) {
+          console.log(err);
           return res.status(500).send("DB error");
         }
 
@@ -79,35 +67,4 @@ app.post("/order", (req, res) => {
   });
 });
 
-
-// 📤 عرض الطلبات (بدون حماية)
-app.get("/orders", (req, res) => {
-
-  db.query("SELECT * FROM orders", (err, result) => {
-    if (err) {
-      return res.status(500).send("Error fetching");
-    }
-    res.json(result);
-  });
-
-});
-
-
-// 🔄 تحديث الحالة
-app.put("/order/:id", (req, res) => {
-
-  db.query(
-    "UPDATE orders SET status='done' WHERE id=?",
-    [req.params.id],
-    (err) => {
-      if (err) {
-        return res.status(500).send("Error updating");
-      }
-      res.send("updated");
-    }
-  );
-
-});
-
-
-app.listen(3000, () => console.log("Server running"));
+app.listen(3000, () => console.log("Server running on 3000"));
