@@ -168,14 +168,9 @@ border-radius:6px;
 background:#000;
 }
 
-/* باقي السكشنات نفسهم */
+/* WHY SECTION */
 .why{
 background:#f2eae4;
-padding:70px;
-text-align:center;
-}
-
-.reviews{
 padding:70px;
 text-align:center;
 }
@@ -197,10 +192,7 @@ background:#f2eae4;
 <nav>
 <a href="index.html">Home</a>
 <a href="menu.html">Menu</a>
-
-<!-- 🔥 صار يشتغل -->
 <a onclick="goToOrder()">Orders</a>
-
 <a href="https://www.instagram.com/cookiemisu/" target="_blank">Instagram</a>
 </nav>
 </header>
@@ -209,12 +201,11 @@ background:#f2eae4;
 <section class="hero">
 <div class="hero-content">
 <h1>Fresh Tiramisu Cookies — Made Daily</h1>
-<p>Limited batches. Premium ingredients. Unforgettable taste.</p>
+<p>Limited batches Premium ingredients Unforgettable taste</p>
 
 <button onclick="window.location.href='menu.html'">
 Order Now
 </button>
-
 </div>
 </section>
 
@@ -228,7 +219,7 @@ Order Now
 <div class="badge">Best Seller</div>
 <img src="img/1.png">
 <h3>Tiramisu Cookie</h3>
-<p>Crispy outside, creamy inside</p>
+<p>Crispy outside creamy inside</p>
 <button onclick="addToCart('Tiramisu Cookie',12)">Order</button>
 </div>
 
@@ -249,49 +240,56 @@ Order Now
 </div>
 </section>
 
+<!-- WHY COOKIEMISU -->
+<section class="why">
+
+<h2>Why Cookiemisu</h2>
+
+<p style="max-width:750px;margin:20px auto;line-height:1.8;">
+Most dessert brands focus on quantity we focus on impact at Cookiemisu every item is built to feel premium from the first bite to the last no random flavors no cheap shortcuts no average quality just carefully made desserts that actually taste as good as they look if it does not stand out we do not sell it simple
+</p>
+
+<p style="margin-top:15px;font-weight:600;">
+Because every order is freshly made your order must be placed at least 48 hours in advance
+</p>
+
+</section>
+
 <footer>
 © Cookiemisu
 </footer>
 
-<!-- 🔥 SCRIPT الصح -->
 <script>
 
 function addToCart(name, price){
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  cart.push({
-    name: name,
-    size: "Medium",
-    quantity: 1,
-    price: price
-  });
+cart.push({
+name: name,
+size: "Medium",
+quantity: 1,
+price: price
+});
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("cart", JSON.stringify(cart));
 
-  console.log("Cart:", cart);
-
-  alert("Added to cart");
+alert("Added to cart");
 }
 
-
-// 🔗 الذهاب لصفحة الطلب
 function goToOrder(){
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // ❌ إذا فاضي
-  if(cart.length === 0){
-    alert("Cart is empty");
-    return;
-  }
-
-  window.location.href = "order.html";
+if(cart.length === 0){
+alert("Cart is empty");
+return;
 }
 
+window.location.href = "order.html";
+}
 
 </script>
-  
 
 </body>
 </html>
