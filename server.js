@@ -17,7 +17,7 @@ const db = mysql.createConnection({
 
 db.connect(err => {
   if (err) {
-    console.log(err);
+    console.log("DB Error:", err);
   } else {
     console.log("Connected to DB");
   }
@@ -37,6 +37,7 @@ app.post("/order", (req, res) => {
   `;
 
   let completed = 0;
+  let sent = false;
 
   cart.forEach(item => {
 
@@ -52,14 +53,16 @@ app.post("/order", (req, res) => {
       ],
       (err) => {
 
-        if (err) {
-          console.log(err);
+        if (err && !sent) {
+          sent = true;
+          console.log("DB Error:", err);
           return res.status(500).send("DB error");
         }
 
         completed++;
 
-        if (completed === cart.length) {
+        if (completed === cart.length && !sent) {
+          sent = true;
           res.send("Order saved");
         }
 
@@ -70,4 +73,6 @@ app.post("/order", (req, res) => {
 
 });
 
-app.listen(3000, () => console.log("Server running"));
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running on port 3000");
+});
