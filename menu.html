@@ -15,10 +15,6 @@ box-sizing:border-box;
 font-family:'Playfair Display', serif;
 }
 
-html{
-scroll-behavior:smooth;
-}
-
 body{
 background:#f6f1ec;
 color:#5a3a2e;
@@ -32,16 +28,12 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 8%;
-background:rgba(242,234,228,0.95);
-backdrop-filter:blur(8px);
-box-shadow:0 4px 20px rgba(0,0,0,0.05);
-animation:slideDown 0.7s ease;
+background:#f2eae4;
 }
 
 .logo{
 font-size:22px;
 font-weight:600;
-letter-spacing:1px;
 }
 
 nav{
@@ -62,21 +54,19 @@ color:#000;
 
 .title{
 text-align:center;
-padding:70px 20px 25px;
-animation:fadeUp 0.8s ease;
+padding:60px 20px 20px;
 }
 
 .title h1{
-font-size:44px;
+font-size:40px;
 }
 
 .menu-section{
 margin-bottom:50px;
-animation:fadeUp 0.9s ease;
 }
 
 .section-title{
-font-size:28px;
+font-size:26px;
 margin:40px 8% 10px;
 }
 
@@ -89,50 +79,34 @@ gap:35px;
 
 .card{
 background:white;
-border-radius:18px;
+border-radius:14px;
 overflow:hidden;
-box-shadow:0 14px 35px rgba(0,0,0,0.09);
-transition:0.35s;
+box-shadow:0 12px 30px rgba(0,0,0,0.1);
+transition:0.3s;
 max-width:300px;
 margin:auto;
 position:relative;
-opacity:0;
-transform:translateY(30px);
-animation:fadeUp 0.7s ease forwards;
 }
 
-.card:nth-child(1){animation-delay:0.15s;}
-.card:nth-child(2){animation-delay:0.3s;}
-.card:nth-child(3){animation-delay:0.45s;}
-
 .card:hover{
-transform:translateY(-12px) scale(1.02);
-box-shadow:0 22px 45px rgba(0,0,0,0.15);
+transform:translateY(-10px);
 }
 
 .product-img{
 width:100%;
 height:260px;
 object-fit:cover;
-transition:0.4s;
-display:block;
-}
-
-.card:hover .product-img{
-transform:scale(1.08);
-filter:brightness(0.95);
 }
 
 .badge{
 position:absolute;
-top:14px;
-left:14px;
+top:12px;
+left:12px;
 background:#5c3b2e;
 color:white;
 padding:6px 12px;
 font-size:12px;
-border-radius:20px;
-z-index:10;
+border-radius:6px;
 }
 
 .new{
@@ -140,20 +114,19 @@ background:#000;
 }
 
 .card-content{
-padding:16px 18px 22px;
+padding:15px 18px 20px;
 text-align:center;
 }
 
 .card h3{
 margin-bottom:6px;
-font-size:19px;
+font-size:18px;
 }
 
 .card p{
 font-size:14px;
 color:#7a5a45;
 margin-bottom:15px;
-line-height:1.5;
 }
 
 .card button{
@@ -164,70 +137,11 @@ background:#5c3b2e;
 color:white;
 cursor:pointer;
 transition:0.3s;
-border-radius:10px;
-font-size:14px;
-font-weight:600;
-position:relative;
-overflow:hidden;
-}
-
-.card button::after{
-content:"";
-position:absolute;
-top:0;
-left:0;
-width:0;
-height:100%;
-background:rgba(255,255,255,0.22);
-transition:0.4s;
-}
-
-.card button:hover::after{
-width:100%;
+border-radius:6px;
 }
 
 .card button:hover{
 background:#000;
-transform:translateY(-2px);
-}
-
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(30px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-@keyframes slideDown{
-from{
-opacity:0;
-transform:translateY(-30px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-@media(max-width:700px){
-header{
-flex-direction:column;
-gap:15px;
-}
-
-nav{
-gap:15px;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.title h1{
-font-size:34px;
-}
 }
 
 </style>
@@ -250,6 +164,7 @@ font-size:34px;
 <h1>Our Menu</h1>
 </section>
 
+<!-- COOKIES -->
 <section class="menu-section">
 <h2 class="section-title">Cookies</h2>
 
@@ -283,9 +198,21 @@ font-size:34px;
 </div>
 </div>
 
+<!-- 🔥 Cookies Box -->
+<div class="card">
+<div class="badge new">New</div>
+<img src="img/cookies-box (2).png" class="product-img">
+<div class="card-content">
+<h3>Cookies Box</h3>
+<p>Mix of our best cookies in one premium box</p>
+<button onclick="goToProduct('Cookies Box')">View</button>
+</div>
+</div>
+
 </div>
 </section>
 
+<!-- TIRAMISU -->
 <section class="menu-section">
 <h2 class="section-title">Tiramisu</h2>
 
@@ -306,50 +233,6 @@ font-size:34px;
 <h3>Tiramisu Balls</h3>
 <p>Creamy tiramisu bites dusted with rich cocoa</p>
 <button onclick="goToProduct('Tiramisu Balls')">View</button>
-</div>
-</div>
-
-</div>
-</section>
-
-<section class="menu-section">
-<h2 class="section-title">Chocolate</h2>
-
-<div class="menu">
-
-<div class="card">
-<img src="img/6.png" class="product-img">
-<div class="card-content">
-<h3>Dubai Chocolate</h3>
-<p>Milk chocolate filled with creamy pistachio center</p>
-<button onclick="goToProduct('Dubai Chocolate')">View</button>
-</div>
-</div>
-
-</div>
-</section>
-
-<section class="menu-section">
-<h2 class="section-title">Bakery</h2>
-
-<div class="menu">
-
-<div class="card">
-<img src="img/5.png" class="product-img">
-<div class="card-content">
-<h3>Cinnamon Roll</h3>
-<p>Soft cinnamon roll topped with warm vanilla glaze</p>
-<button onclick="goToProduct('Cinnamon Roll')">View</button>
-</div>
-</div>
-
-<div class="card">
-<div class="badge new">New</div>
-<img src="img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png" class="product-img">
-<div class="card-content">
-<h3>Strawberry Muffins</h3>
-<p>Soft muffins filled with sweet strawberry flavor</p>
-<button onclick="goToProduct('Strawberry Muffins')">View</button>
 </div>
 </div>
 
