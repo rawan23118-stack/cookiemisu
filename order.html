@@ -18,16 +18,27 @@ color:#5a3a2e;
 padding:40px 8%;
 }
 
-h1{text-align:center;font-size:38px;}
-.subtitle{text-align:center;color:#7a5a45;margin-bottom:30px;}
+h1{
+text-align:center;
+font-size:38px;
+}
+
+.subtitle{
+text-align:center;
+color:#7a5a45;
+margin-bottom:30px;
+}
 
 .wrapper{
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:30px;
+align-items:start;
 }
 
-.cart-box,.summary-box,.form{
+.cart-box,
+.summary-box,
+.form{
 background:white;
 padding:22px;
 border-radius:16px;
@@ -37,8 +48,13 @@ box-shadow:0 12px 30px rgba(0,0,0,0.08);
 .item{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:15px 0;
 border-bottom:1px solid #eee;
+}
+
+.item:last-child{
+border-bottom:none;
 }
 
 .left{
@@ -54,10 +70,22 @@ border-radius:12px;
 object-fit:cover;
 }
 
+.info h3{
+margin:0;
+font-size:18px;
+}
+
+.info p{
+margin:4px 0;
+font-size:13px;
+color:#7a5a45;
+}
+
 .qty-box{
 display:flex;
 gap:10px;
 align-items:center;
+justify-content:flex-end;
 }
 
 .qty-box button{
@@ -69,14 +97,70 @@ cursor:pointer;
 border-radius:5px;
 }
 
-.price{font-weight:bold;}
+.price{
+font-weight:bold;
+text-align:right;
+margin-top:8px;
+}
 
-.form input,.form textarea{
+.form{
+margin-top:25px;
+}
+
+.form h3,
+.summary-box h3{
+margin-top:0;
+}
+
+.form input,
+.form textarea{
 width:100%;
 padding:12px;
 margin:10px 0;
 border-radius:8px;
-border:1px solid #ddd;
+border:1px solid #d5c7bd;
+font-family:'Playfair Display', serif;
+background:#fffaf7;
+}
+
+.form textarea{
+height:90px;
+resize:none;
+}
+
+.summary-item{
+background:#fffaf7;
+border:1px solid #eaded5;
+border-radius:12px;
+padding:12px;
+margin-bottom:12px;
+}
+
+.summary-item h4{
+margin:0 0 5px;
+font-size:16px;
+}
+
+.summary-item p{
+margin:3px 0;
+font-size:13px;
+color:#7a5a45;
+}
+
+.summary-item .item-price{
+font-weight:bold;
+margin-top:8px;
+color:#5a3a2e;
+}
+
+.summary-total{
+display:flex;
+justify-content:space-between;
+font-size:22px;
+font-weight:bold;
+border-top:1px solid #ddd;
+padding-top:15px;
+margin-top:15px;
 }
 
 .actions{
@@ -85,21 +169,58 @@ gap:10px;
 margin-top:20px;
 }
 
-.clear-btn,.checkout-btn{
+.clear-btn,
+.checkout-btn{
 flex:1;
 padding:12px;
 border:none;
 cursor:pointer;
 border-radius:8px;
+font-weight:600;
 }
 
-.clear-btn{background:#ddd;}
-.checkout-btn{background:#5c3b2e;color:white;}
+.clear-btn{
+background:#ddd;
+color:#000;
+}
+
+.checkout-btn{
+background:#5c3b2e;
+color:white;
+}
+
+.checkout-btn:hover{
+background:#000;
+}
 
 .empty{
 text-align:center;
 color:#999;
 padding:30px 0;
+}
+
+@media(max-width:800px){
+body{
+padding:25px 5%;
+}
+
+.wrapper{
+grid-template-columns:1fr;
+}
+
+.item{
+align-items:flex-start;
+gap:10px;
+}
+
+.left img{
+width:65px;
+height:65px;
+}
+
+h1{
+font-size:32px;
+}
 }
 </style>
 </head>
@@ -124,7 +245,13 @@ padding:30px 0;
 
 <div class="summary-box">
 <h3>Order Summary</h3>
-<div id="total"></div>
+
+<div id="summaryItems"></div>
+
+<div class="summary-total">
+<span>Total</span>
+<span id="total">0 JD</span>
+</div>
 
 <div class="actions">
 <button class="clear-btn" onclick="clearCart()">Clear</button>
@@ -164,11 +291,15 @@ return 0;
 function render(){
 
 let container=document.getElementById("cart");
+let summaryItems=document.getElementById("summaryItems");
+
 container.innerHTML="";
+summaryItems.innerHTML="";
 
 if(cart.length===0){
 container.innerHTML=`<div class="empty">Cart empty</div>`;
-document.getElementById("total").innerText="";
+summaryItems.innerHTML=`<div class="empty">No items selected</div>`;
+document.getElementById("total").innerText="0 JD";
 return;
 }
 
@@ -182,8 +313,8 @@ total+=price;
 container.innerHTML+=`
 <div class="item">
 <div class="left">
-<img src="${images[item.name]}">
-<div>
+<img src="${images[item.name] || 'img/1.png'}">
+<div class="info">
 <h3>${item.name}</h3>
 <p>Qty: ${item.quantity}</p>
 ${item.size ? `<p>Size: ${item.size}</p>` : ""}
@@ -200,16 +331,29 @@ ${item.size ? `<p>Size: ${item.size}</p>` : ""}
 </div>
 </div>
 `;
+
+summaryItems.innerHTML+=`
+<div class="summary-item">
+<h4>${item.name}</h4>
+<p>Quantity: ${item.quantity}</p>
+${item.size ? `<p>Size: ${item.size}</p>` : ""}
+<p class="item-price">${price.toFixed(2)} JD</p>
+</div>
+`;
 });
 
-document.getElementById("total").innerText="Total: "+total.toFixed(2)+" JD";
+document.getElementById("total").innerText=total.toFixed(2)+" JD";
 
 localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 function change(i,c){
 cart[i].quantity+=c;
-if(cart[i].quantity<1) cart.splice(i,1);
+
+if(cart[i].quantity<1){
+cart.splice(i,1);
+}
+
 render();
 }
 
@@ -223,6 +367,7 @@ function checkout(){
 
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
+let notes=document.getElementById("notes").value.trim();
 
 if(!name || !phone){
 alert("Fill your info");
@@ -234,9 +379,28 @@ alert("Cart empty");
 return;
 }
 
+fetch("http://192.168.1.5:3000/order", {
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name,
+phone,
+notes,
+cart,
+total:document.getElementById("total").innerText
+})
+})
+.then(res=>res.text())
+.then(()=>{
 alert("Order sent");
 localStorage.removeItem("cart");
 location.reload();
+})
+.catch(()=>{
+alert("Server error");
+});
 }
 
 render();
