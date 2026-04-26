@@ -102,8 +102,13 @@ transform:translateY(-10px);
 width:100%;
 height:260px;
 object-fit:cover;
-object-position:center;
-display:block;
+transition:0.4s;
+}
+
+/* 🔥 تأثير احترافي */
+.card:hover .product-img{
+transform:scale(1.08);
+filter:brightness(0.95);
 }
 
 /* BADGE */
@@ -278,7 +283,7 @@ transform:scale(1.05);
 
 <div class="card">
 <div class="badge new">New</div>
-<img src="img/8.png" class="product-img">
+<img src="img/strawberry.png" class="product-img">
 <div class="card-content">
 <h3>Strawberry Muffins</h3>
 <p>Soft muffins filled with sweet strawberry flavor</p>
