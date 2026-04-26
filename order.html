@@ -29,44 +29,40 @@ color:#7a5a45;
 margin-bottom:22px;
 }
 
-.back-btn{
-display:block;
-margin:0 auto 35px;
-background:#e3d6cb;
+/* 🔥 SWITCH */
+.switch{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-bottom:30px;
+}
+
+.switch button{
+padding:10px 20px;
 border:none;
-padding:12px 26px;
+background:#e3d6cb;
 cursor:pointer;
-border-radius:30px;
+border-radius:20px;
 font-weight:600;
-color:#5a3a2e;
+transition:0.3s;
 }
 
-.wrapper{
-display:grid;
-grid-template-columns:1.1fr 1fr;
-gap:30px;
-align-items:start;
+.switch .active{
+background:#5c3b2e;
+color:white;
 }
 
-.form,
-.summary-box{
+/* BOX */
+.box{
 background:white;
 padding:28px;
 border-radius:22px;
 box-shadow:0 14px 35px rgba(0,0,0,0.08);
+max-width:600px;
+margin:0 auto;
 }
 
-.form{
-display:flex;
-flex-direction:column;
-}
-
-.form h3,
-.summary-box h3{
-margin-top:0;
-font-size:24px;
-}
-
+/* FORM */
 .form input,
 .form textarea{
 width:100%;
@@ -85,27 +81,23 @@ height:100px;
 resize:none;
 }
 
-.form input:focus,
-.form textarea:focus{
-border-color:#5c3b2e;
-}
-
+/* SUMMARY */
 .summary-item{
 display:flex;
-gap:14px;
-align-items:center;
+gap:12px;
 background:#fffaf7;
 border:1px solid #eaded5;
 border-radius:16px;
 padding:12px;
-margin-bottom:14px;
+margin-bottom:12px;
+align-items:center;
 }
 
 .summary-item img{
-width:72px;
-height:72px;
+width:65px;
+height:65px;
+border-radius:12px;
 object-fit:cover;
-border-radius:14px;
 }
 
 .summary-info{
@@ -113,8 +105,8 @@ flex:1;
 }
 
 .summary-info h4{
-margin:0 0 5px;
-font-size:17px;
+margin:0;
+font-size:16px;
 }
 
 .summary-info p{
@@ -123,48 +115,25 @@ font-size:13px;
 color:#7a5a45;
 }
 
-.summary-price{
-font-weight:bold;
-font-size:15px;
-color:#5a3a2e;
-}
-
 .summary-total{
 display:flex;
 justify-content:space-between;
-font-size:24px;
+font-size:22px;
 font-weight:bold;
-border-top:1px solid #ddd;
-padding-top:18px;
-margin-top:18px;
+margin-top:20px;
 }
 
-.actions{
-display:flex;
-gap:12px;
-margin-top:24px;
-}
-
-.clear-btn,
+/* BUTTON */
 .checkout-btn{
-flex:1;
+width:100%;
+margin-top:20px;
 padding:14px;
 border:none;
-cursor:pointer;
-border-radius:12px;
-font-weight:600;
-font-family:'Playfair Display', serif;
-transition:0.3s;
-}
-
-.clear-btn{
-background:#e2d6cd;
-color:#5a3a2e;
-}
-
-.checkout-btn{
 background:#5c3b2e;
 color:white;
+border-radius:12px;
+cursor:pointer;
+font-weight:600;
 }
 
 .checkout-btn:hover{
@@ -174,21 +143,7 @@ background:black;
 .empty{
 text-align:center;
 color:#999;
-padding:35px 0;
-}
-
-@media(max-width:800px){
-body{
-padding:25px 5%;
-}
-
-.wrapper{
-grid-template-columns:1fr;
-}
-
-h1{
-font-size:34px;
-}
+padding:30px;
 }
 </style>
 </head>
@@ -198,20 +153,13 @@ font-size:34px;
 <h1>Your Orders</h1>
 <p class="subtitle">Review your order before confirming</p>
 
-<button class="back-btn" onclick="goBack()">← Back to Menu</button>
-
-<div class="wrapper">
-
-<div class="form">
-<h3>Customer Info</h3>
-<input id="name" placeholder="Name">
-<input id="phone" placeholder="Phone">
-<textarea id="notes" placeholder="Notes"></textarea>
+<div class="switch">
+<button id="tabOrder" class="active" onclick="showTab('order')">Order Summary</button>
+<button id="tabInfo" onclick="showTab('info')">Customer Info</button>
 </div>
 
-<div class="summary-box">
-<h3>Order Summary</h3>
-
+<!-- ORDER -->
+<div id="orderTab" class="box">
 <div id="summaryItems"></div>
 
 <div class="summary-total">
@@ -219,18 +167,25 @@ font-size:34px;
 <span id="total">0 JD</span>
 </div>
 
-<div class="actions">
-<button class="clear-btn" onclick="clearCart()">Clear</button>
-<button class="checkout-btn" onclick="checkout()">Confirm</button>
-</div>
+<button class="checkout-btn" onclick="showTab('info')">
+Continue
+</button>
 </div>
 
+<!-- CUSTOMER -->
+<div id="infoTab" class="box" style="display:none;">
+<div class="form">
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<textarea id="notes" placeholder="Notes"></textarea>
+</div>
+
+<button class="checkout-btn" onclick="checkout()">
+Confirm Order
+</button>
 </div>
 
 <script>
-function goBack(){
-window.location.href="menu.html";
-}
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -247,13 +202,13 @@ const images = {
 };
 
 function getPrice(item){
-if(item.name==="Strawberry Muffins") return 1.5;
-if(item.name==="Tiramisu Balls") return 3;
+if(item.name==="Dubai Chocolate") return 1;
 if(item.name==="Classic Cookie") return 1;
 if(item.name==="Blueberry Cookie") return 1.5;
 if(item.name==="Cinnamon Roll") return 1.5;
 if(item.name==="Tiramisu Cookie") return 2;
-if(item.name==="Dubai Chocolate") return 1;
+if(item.name==="Tiramisu Balls") return 3;
+if(item.name==="Strawberry Muffins") return 1.5;
 
 if(item.name==="Classic Tiramisu"){
 return Number(item.size) || 12;
@@ -263,28 +218,22 @@ if(item.name==="Cookies Box"){
 return Number(item.boxSize) || 9;
 }
 
-return item.price || 0;
-}
-
-function getSizeLabel(item){
-if(item.name !== "Classic Tiramisu") return "";
-if(Number(item.size) === 5) return "Small - 5 JD";
-if(Number(item.size) === 12) return "Medium - 12 JD";
-if(Number(item.size) === 20) return "Large - 20 JD";
-return "Medium - 12 JD";
+return 0;
 }
 
 function getBoxLabel(item){
-if(item.name !== "Cookies Box") return "";
-if(Number(item.boxSize) === 5) return "Box of 3 - 5 JD";
-if(Number(item.boxSize) === 9) return "Box of 6 - 9 JD";
-if(Number(item.boxSize) === 16) return "Box of 12 - 16 JD";
-return "Box of 6 - 9 JD";
+if(item.name!=="Cookies Box") return "";
+
+if(item.boxSize==5) return "Box of 3";
+if(item.boxSize==9) return "Box of 6";
+if(item.boxSize==16) return "Box of 12";
+
+return "";
 }
 
 function render(){
+
 let summary=document.getElementById("summaryItems");
-summary.innerHTML="";
 
 if(cart.length===0){
 summary.innerHTML=`<div class="empty">No items selected</div>`;
@@ -293,37 +242,47 @@ return;
 }
 
 let total=0;
+summary.innerHTML="";
 
-cart.forEach((item,i)=>{
+cart.forEach(item=>{
+
 let price=getPrice(item)*item.quantity;
 total+=price;
 
 summary.innerHTML+=`
 <div class="summary-item">
-<img src="${images[item.name] || 'img/1.png'}">
+<img src="${images[item.name]}">
 
 <div class="summary-info">
 <h4>${item.name}</h4>
-<p>Quantity: ${item.quantity}</p>
-${item.name==="Classic Tiramisu" ? `<p>${getSizeLabel(item)}</p>` : ""}
+<p>Qty: ${item.quantity}</p>
 ${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
-<p class="summary-price">${price.toFixed(2)} JD</p>
+<p><b>${price} JD</b></p>
 </div>
 </div>
 `;
 });
 
-document.getElementById("total").innerText=total.toFixed(2)+" JD";
-localStorage.setItem("cart", JSON.stringify(cart));
+document.getElementById("total").innerText=total+" JD";
 }
 
-function clearCart(){
-localStorage.removeItem("cart");
-cart=[];
-render();
+function showTab(tab){
+
+document.getElementById("orderTab").style.display = tab==="order"?"block":"none";
+document.getElementById("infoTab").style.display = tab==="info"?"block":"none";
+
+document.getElementById("tabOrder").classList.remove("active");
+document.getElementById("tabInfo").classList.remove("active");
+
+if(tab==="order"){
+document.getElementById("tabOrder").classList.add("active");
+}else{
+document.getElementById("tabInfo").classList.add("active");
+}
 }
 
 function checkout(){
+
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
 
@@ -343,6 +302,7 @@ location.reload();
 }
 
 render();
+
 </script>
 
 </body>
