@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-
 *{box-sizing:border-box;}
 
 body{
@@ -27,10 +26,27 @@ font-size:42px;
 .subtitle{
 text-align:center;
 color:#7a5a45;
-margin-bottom:30px;
+margin-bottom:20px;
 }
 
-/* 🔥 LAYOUT */
+.back-btn{
+display:block;
+margin:0 auto 35px;
+background:#e3d6cb;
+border:none;
+padding:12px 26px;
+cursor:pointer;
+border-radius:30px;
+font-weight:600;
+color:#5a3a2e;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#d6c5b8;
+transform:translateY(-2px);
+}
+
 .wrapper{
 display:grid;
 grid-template-columns:1.2fr 1fr;
@@ -38,7 +54,6 @@ gap:30px;
 align-items:start;
 }
 
-/* BOX */
 .box{
 background:white;
 padding:28px;
@@ -46,7 +61,6 @@ border-radius:22px;
 box-shadow:0 14px 35px rgba(0,0,0,0.08);
 }
 
-/* SUMMARY */
 .summary-item{
 display:flex;
 gap:12px;
@@ -88,7 +102,6 @@ font-weight:bold;
 margin-top:20px;
 }
 
-/* FORM */
 .form input,
 .form textarea{
 width:100%;
@@ -106,7 +119,6 @@ height:100px;
 resize:none;
 }
 
-/* BUTTON */
 .btn{
 width:100%;
 margin-top:20px;
@@ -123,13 +135,11 @@ font-weight:600;
 background:black;
 }
 
-/* MOBILE */
 @media(max-width:800px){
 .wrapper{
 grid-template-columns:1fr;
 }
 }
-
 </style>
 </head>
 
@@ -138,9 +148,10 @@ grid-template-columns:1fr;
 <h1>Your Orders</h1>
 <p class="subtitle">Review and confirm your order</p>
 
+<button class="back-btn" onclick="smartBack()">← Back to Menu</button>
+
 <div class="wrapper">
 
-<!-- 🔥 LEFT: ORDER -->
 <div class="box">
 <h3>Order Summary</h3>
 
@@ -152,7 +163,6 @@ grid-template-columns:1fr;
 </div>
 </div>
 
-<!-- 🔥 RIGHT: FORM -->
 <div class="box form">
 <h3>Customer Info</h3>
 
@@ -166,7 +176,6 @@ grid-template-columns:1fr;
 </div>
 
 <script>
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const images = {
@@ -180,6 +189,31 @@ const images = {
 "Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png",
 "Cookies Box":"img/cookies-box (2).png"
 };
+
+function saveForm(){
+let data = {
+name:document.getElementById("name").value,
+phone:document.getElementById("phone").value,
+notes:document.getElementById("notes").value
+};
+
+localStorage.setItem("orderForm", JSON.stringify(data));
+}
+
+function loadForm(){
+let data = JSON.parse(localStorage.getItem("orderForm"));
+
+if(!data) return;
+
+document.getElementById("name").value = data.name || "";
+document.getElementById("phone").value = data.phone || "";
+document.getElementById("notes").value = data.notes || "";
+}
+
+function smartBack(){
+saveForm();
+window.location.href = "menu.html";
+}
 
 function getPrice(item){
 if(item.name==="Dubai Chocolate") return 1;
@@ -201,12 +235,32 @@ return Number(item.boxSize) || 9;
 return 0;
 }
 
-function render(){
+function getSizeLabel(item){
+if(item.name !== "Classic Tiramisu") return "";
 
+if(Number(item.size) === 5) return "Small - 5 JD";
+if(Number(item.size) === 12) return "Medium - 12 JD";
+if(Number(item.size) === 20) return "Large - 20 JD";
+
+return "Medium - 12 JD";
+}
+
+function getBoxLabel(item){
+if(item.name !== "Cookies Box") return "";
+
+if(Number(item.boxSize) === 5) return "Box of 3 - 5 JD";
+if(Number(item.boxSize) === 9) return "Box of 6 - 9 JD";
+if(Number(item.boxSize) === 16) return "Box of 12 - 16 JD";
+
+return "Box of 6 - 9 JD";
+}
+
+function render(){
 let summary=document.getElementById("summaryItems");
 
 if(cart.length===0){
 summary.innerHTML=`<p>Cart is empty</p>`;
+document.getElementById("total").innerText="0 JD";
 return;
 }
 
@@ -220,21 +274,22 @@ total+=price;
 
 summary.innerHTML+=`
 <div class="summary-item">
-<img src="${images[item.name]}">
+<img src="${images[item.name] || 'img/1.png'}">
 <div class="summary-info">
 <h4>${item.name}</h4>
 <p>Qty: ${item.quantity}</p>
-<p><b>${price} JD</b></p>
+${item.name==="Classic Tiramisu" ? `<p>${getSizeLabel(item)}</p>` : ""}
+${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
+<p><b>${price.toFixed(2)} JD</b></p>
 </div>
 </div>
 `;
 });
 
-document.getElementById("total").innerText=total+" JD";
+document.getElementById("total").innerText=total.toFixed(2)+" JD";
 }
 
 function checkout(){
-
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
 
@@ -250,11 +305,12 @@ return;
 
 alert("Order sent");
 localStorage.removeItem("cart");
+localStorage.removeItem("orderForm");
 location.reload();
 }
 
+loadForm();
 render();
-
 </script>
 
 </body>
