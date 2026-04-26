@@ -169,7 +169,13 @@ const products = {
 "Blueberry Cookie":{img1:"img/3.png",desc:"Soft cookie filled with blueberries & white chocolate",price:1.5},
 "Tiramisu Cookie":{img1:"img/1.png",desc:"Soft cookie topped with creamy tiramisu & cocoa dust",price:2},
 "Classic Cookie":{img1:"img/7.png",desc:"Soft baked cookie loaded with rich chocolate chips",price:1},
-"Strawberry Muffins":{img1:"img/8.png",desc:"Soft muffins filled with sweet strawberry flavor",price:1.5},
+
+/* 🔥 الصورة بالاسم الطويل تبعك */
+"Strawberry Muffins":{
+img1:"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png",
+desc:"Soft muffins filled with sweet strawberry flavor",
+price:1.5
+},
 
 "Classic Tiramisu":{
 img1:"img/2.png",
@@ -184,12 +190,10 @@ if(!product){
 document.body.innerHTML = "<h2>No product</h2>";
 }
 
-/* عرض */
 document.getElementById("name").innerText = selected;
 document.getElementById("desc").innerText = product.desc;
 document.getElementById("img1").src = product.img1;
 
-/* فقط التيراميسو */
 if(selected === "Classic Tiramisu"){
 document.getElementById("sizeBox").style.display = "block";
 }
