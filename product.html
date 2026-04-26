@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-
 body{
 margin:0;
 font-family:'Playfair Display', serif;
@@ -112,7 +111,6 @@ border-radius:8px;
 .order-btn:hover{
 background:black;
 }
-
 </style>
 </head>
 
@@ -147,6 +145,14 @@ background:black;
 </select>
 </div>
 
+<div class="size-select" id="boxBox" style="display:none;">
+<select id="boxSize" onchange="updatePrice()">
+<option value="5">Box of 3 - 5 JD</option>
+<option value="9">Box of 6 - 9 JD</option>
+<option value="16">Box of 12 - 16 JD</option>
+</select>
+</div>
+
 <div class="quantity-box">
 <button onclick="changeQty(-1)">-</button>
 <span id="qty">1</span>
@@ -161,29 +167,16 @@ background:black;
 </div>
 
 <script>
-
 const products = {
 "Tiramisu Balls":{img1:"img/4.png",desc:"Creamy tiramisu bites dusted with rich cocoa",price:3},
-"Dubai Chocolate":{
-img1:"img/6.png",
-desc:"Milk chocolate filled with creamy pistachio center (1 JD per piece)",
-price:1
-},
+"Dubai Chocolate":{img1:"img/6.png",desc:"Milk chocolate filled with creamy pistachio center (1 JD per piece)",price:1},
 "Cinnamon Roll":{img1:"img/5.png",desc:"Soft cinnamon roll topped with warm vanilla glaze",price:1.5},
 "Blueberry Cookie":{img1:"img/3.png",desc:"Soft cookie filled with blueberries & white chocolate",price:1.5},
 "Tiramisu Cookie":{img1:"img/1.png",desc:"Soft cookie topped with creamy tiramisu & cocoa dust",price:2},
 "Classic Cookie":{img1:"img/7.png",desc:"Soft baked cookie loaded with rich chocolate chips",price:1},
-
-"Strawberry Muffins":{
-img1:"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png",
-desc:"Soft muffins filled with sweet strawberry flavor",
-price:1.5
-},
-
-"Classic Tiramisu":{
-img1:"img/2.png",
-desc:"Layers of coffee-soaked biscuits with creamy mascarpone & cocoa"
-}
+"Strawberry Muffins":{img1:"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png",desc:"Soft muffins filled with sweet strawberry flavor",price:1.5},
+"Cookies Box":{img1:"img/cookies-box (2).png",desc:"Mix of our best cookies in one premium box"},
+"Classic Tiramisu":{img1:"img/2.png",desc:"Layers of coffee-soaked biscuits with creamy mascarpone & cocoa"}
 };
 
 let selected = localStorage.getItem("selectedProduct");
@@ -201,30 +194,35 @@ if(selected === "Classic Tiramisu"){
 document.getElementById("sizeBox").style.display = "block";
 }
 
+if(selected === "Cookies Box"){
+document.getElementById("boxBox").style.display = "block";
+}
+
 let qty = 1;
 
 function getPrice(){
 if(selected === "Classic Tiramisu"){
 return Number(document.getElementById("size").value) * qty;
-}else{
-return product.price * qty;
 }
+
+if(selected === "Cookies Box"){
+return Number(document.getElementById("boxSize").value) * qty;
+}
+
+return product.price * qty;
 }
 
 function changeQty(c){
 qty += c;
 if(qty < 1) qty = 1;
-
 document.getElementById("qty").innerText = qty;
 updatePrice();
 }
 
 function updatePrice(){
-
 let price = getPrice();
 let text = price + " JD";
 
-/* 🔥 توضيح دبي تشوكلت */
 if(selected === "Dubai Chocolate"){
 text += " (per piece)";
 }
@@ -233,7 +231,6 @@ document.getElementById("totalPrice").innerText = text;
 }
 
 function goToOrder(){
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 let item = {
@@ -245,8 +242,14 @@ if(selected === "Classic Tiramisu"){
 item.size = document.getElementById("size").value;
 }
 
+if(selected === "Cookies Box"){
+item.boxSize = document.getElementById("boxSize").value;
+}
+
 let existing = cart.find(p =>
-p.name === item.name && p.size === item.size
+p.name === item.name &&
+p.size === item.size &&
+p.boxSize === item.boxSize
 );
 
 if(existing){
@@ -256,12 +259,10 @@ cart.push(item);
 }
 
 localStorage.setItem("cart", JSON.stringify(cart));
-
 window.location.href = "order.html";
 }
 
 updatePrice();
-
 </script>
 
 </body>
