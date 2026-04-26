@@ -139,7 +139,6 @@ background:black;
 <h1 id="name"></h1>
 <p class="desc" id="desc"></p>
 
-<!-- SIZE (فقط للتيراميسو) -->
 <div class="size-select" id="sizeBox" style="display:none;">
 <select id="size" onchange="updatePrice()">
 <option value="5">Small - 5 JD</option>
@@ -148,7 +147,6 @@ background:black;
 </select>
 </div>
 
-<!-- QUANTITY -->
 <div class="quantity-box">
 <button onclick="changeQty(-1)">-</button>
 <span id="qty">1</span>
@@ -165,16 +163,17 @@ background:black;
 <script>
 
 const products = {
-"Tiramisu Balls":{img1:"img/4.png",desc:"Tiramisu balls",price:3},
-"Dubai Chocolate":{img1:"img/6.png",desc:"Dubai chocolate",price:1},
-"Cinnamon Roll":{img1:"img/5.png",desc:"Cinnamon roll",price:1.5},
-"Blueberry Cookie":{img1:"img/3.png",desc:"Blueberry cookie",price:1.5},
-"Tiramisu Cookie":{img1:"img/1.png",desc:"Tiramisu cookie",price:2},
-"Classic Cookie":{img1:"img/7.png",desc:"Classic cookie",price:1},
+"Tiramisu Balls":{img1:"img/4.png",desc:"Creamy tiramisu bites dusted with rich cocoa",price:3},
+"Dubai Chocolate":{img1:"img/6.png",desc:"Milk chocolate filled with creamy pistachio center",price:1},
+"Cinnamon Roll":{img1:"img/5.png",desc:"Soft cinnamon roll topped with warm vanilla glaze",price:1.5},
+"Blueberry Cookie":{img1:"img/3.png",desc:"Soft cookie filled with blueberries & white chocolate",price:1.5},
+"Tiramisu Cookie":{img1:"img/1.png",desc:"Soft cookie topped with creamy tiramisu & cocoa dust",price:2},
+"Classic Cookie":{img1:"img/7.png",desc:"Soft baked cookie loaded with rich chocolate chips",price:1},
+"Strawberry Muffins":{img1:"img/8.png",desc:"Soft muffins filled with sweet strawberry flavor",price:1.5},
 
 "Classic Tiramisu":{
 img1:"img/2.png",
-desc:"Tiramisu"
+desc:"Layers of coffee-soaked biscuits with creamy mascarpone & cocoa"
 }
 };
 
@@ -198,13 +197,11 @@ document.getElementById("sizeBox").style.display = "block";
 let qty = 1;
 
 function getPrice(){
-
 if(selected === "Classic Tiramisu"){
 return Number(document.getElementById("size").value) * qty;
 }else{
 return product.price * qty;
 }
-
 }
 
 function changeQty(c){
@@ -219,7 +216,6 @@ function updatePrice(){
 document.getElementById("totalPrice").innerText = getPrice() + " JD";
 }
 
-/* 🔥 اضافة للكارت مع دمج */
 function goToOrder(){
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -229,12 +225,10 @@ name:selected,
 quantity:qty
 };
 
-/* إذا تيراميسو */
 if(selected === "Classic Tiramisu"){
 item.size = document.getElementById("size").value;
 }
 
-/* 🔥 دمج المنتج */
 let existing = cart.find(p =>
 p.name === item.name && p.size === item.size
 );
