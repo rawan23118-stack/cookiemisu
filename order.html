@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{box-sizing:border-box;}
 
 body{
@@ -26,30 +27,15 @@ font-size:42px;
 .subtitle{
 text-align:center;
 color:#7a5a45;
-margin-bottom:22px;
-}
-
-/* 🔥 SWITCH */
-.switch{
-display:flex;
-justify-content:center;
-gap:10px;
 margin-bottom:30px;
 }
 
-.switch button{
-padding:10px 20px;
-border:none;
-background:#e3d6cb;
-cursor:pointer;
-border-radius:20px;
-font-weight:600;
-transition:0.3s;
-}
-
-.switch .active{
-background:#5c3b2e;
-color:white;
+/* 🔥 LAYOUT */
+.wrapper{
+display:grid;
+grid-template-columns:1.2fr 1fr;
+gap:30px;
+align-items:start;
 }
 
 /* BOX */
@@ -58,27 +44,6 @@ background:white;
 padding:28px;
 border-radius:22px;
 box-shadow:0 14px 35px rgba(0,0,0,0.08);
-max-width:600px;
-margin:0 auto;
-}
-
-/* FORM */
-.form input,
-.form textarea{
-width:100%;
-padding:14px;
-margin:10px 0;
-border-radius:12px;
-border:1px solid #d5c7bd;
-background:#fffaf7;
-font-family:'Playfair Display', serif;
-font-size:15px;
-outline:none;
-}
-
-.form textarea{
-height:100px;
-resize:none;
 }
 
 /* SUMMARY */
@@ -123,8 +88,26 @@ font-weight:bold;
 margin-top:20px;
 }
 
+/* FORM */
+.form input,
+.form textarea{
+width:100%;
+padding:14px;
+margin:10px 0;
+border-radius:12px;
+border:1px solid #d5c7bd;
+background:#fffaf7;
+font-family:'Playfair Display', serif;
+outline:none;
+}
+
+.form textarea{
+height:100px;
+resize:none;
+}
+
 /* BUTTON */
-.checkout-btn{
+.btn{
 width:100%;
 margin-top:20px;
 padding:14px;
@@ -136,53 +119,50 @@ cursor:pointer;
 font-weight:600;
 }
 
-.checkout-btn:hover{
+.btn:hover{
 background:black;
 }
 
-.empty{
-text-align:center;
-color:#999;
-padding:30px;
+/* MOBILE */
+@media(max-width:800px){
+.wrapper{
+grid-template-columns:1fr;
 }
+}
+
 </style>
 </head>
 
 <body>
 
 <h1>Your Orders</h1>
-<p class="subtitle">Review your order before confirming</p>
+<p class="subtitle">Review and confirm your order</p>
 
-<div class="switch">
-<button id="tabOrder" class="active" onclick="showTab('order')">Order Summary</button>
-<button id="tabInfo" onclick="showTab('info')">Customer Info</button>
-</div>
+<div class="wrapper">
 
-<!-- ORDER -->
-<div id="orderTab" class="box">
+<!-- 🔥 LEFT: ORDER -->
+<div class="box">
+<h3>Order Summary</h3>
+
 <div id="summaryItems"></div>
 
 <div class="summary-total">
 <span>Total</span>
 <span id="total">0 JD</span>
 </div>
-
-<button class="checkout-btn" onclick="showTab('info')">
-Continue
-</button>
 </div>
 
-<!-- CUSTOMER -->
-<div id="infoTab" class="box" style="display:none;">
-<div class="form">
+<!-- 🔥 RIGHT: FORM -->
+<div class="box form">
+<h3>Customer Info</h3>
+
 <input id="name" placeholder="Name">
 <input id="phone" placeholder="Phone">
 <textarea id="notes" placeholder="Notes"></textarea>
+
+<button class="btn" onclick="checkout()">Confirm Order</button>
 </div>
 
-<button class="checkout-btn" onclick="checkout()">
-Confirm Order
-</button>
 </div>
 
 <script>
@@ -221,23 +201,12 @@ return Number(item.boxSize) || 9;
 return 0;
 }
 
-function getBoxLabel(item){
-if(item.name!=="Cookies Box") return "";
-
-if(item.boxSize==5) return "Box of 3";
-if(item.boxSize==9) return "Box of 6";
-if(item.boxSize==16) return "Box of 12";
-
-return "";
-}
-
 function render(){
 
 let summary=document.getElementById("summaryItems");
 
 if(cart.length===0){
-summary.innerHTML=`<div class="empty">No items selected</div>`;
-document.getElementById("total").innerText="0 JD";
+summary.innerHTML=`<p>Cart is empty</p>`;
 return;
 }
 
@@ -252,11 +221,9 @@ total+=price;
 summary.innerHTML+=`
 <div class="summary-item">
 <img src="${images[item.name]}">
-
 <div class="summary-info">
 <h4>${item.name}</h4>
 <p>Qty: ${item.quantity}</p>
-${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
 <p><b>${price} JD</b></p>
 </div>
 </div>
@@ -264,21 +231,6 @@ ${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
 });
 
 document.getElementById("total").innerText=total+" JD";
-}
-
-function showTab(tab){
-
-document.getElementById("orderTab").style.display = tab==="order"?"block":"none";
-document.getElementById("infoTab").style.display = tab==="info"?"block":"none";
-
-document.getElementById("tabOrder").classList.remove("active");
-document.getElementById("tabInfo").classList.remove("active");
-
-if(tab==="order"){
-document.getElementById("tabOrder").classList.add("active");
-}else{
-document.getElementById("tabInfo").classList.add("active");
-}
 }
 
 function checkout(){
