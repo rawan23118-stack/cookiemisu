@@ -187,10 +187,10 @@ const images = {
 "Cinnamon Roll":"img/5.png",
 "Tiramisu Balls":"img/4.png",
 "Classic Cookie":"img/7.png",
-"Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png"
+"Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png",
+"Cookies Box":"img/cookies-box (2).png"
 };
 
-/* 🔥 السعر */
 function getPrice(item){
 if(item.name==="Strawberry Muffins") return 1.5;
 if(item.name==="Tiramisu Balls") return 3;
@@ -204,10 +204,13 @@ if(item.name==="Classic Tiramisu"){
 return Number(item.size) || 12;
 }
 
+if(item.name==="Cookies Box"){
+return Number(item.boxSize) || 9;
+}
+
 return 0;
 }
 
-/* 🔥 اسم الحجم */
 function getSizeLabel(item){
 if(item.name !== "Classic Tiramisu") return "";
 
@@ -216,6 +219,16 @@ if(Number(item.size) === 12) return "Medium - 12 JD";
 if(Number(item.size) === 20) return "Large - 20 JD";
 
 return "Medium - 12 JD";
+}
+
+function getBoxLabel(item){
+if(item.name !== "Cookies Box") return "";
+
+if(Number(item.boxSize) === 5) return "Box of 3 - 5 JD";
+if(Number(item.boxSize) === 9) return "Box of 6 - 9 JD";
+if(Number(item.boxSize) === 16) return "Box of 12 - 16 JD";
+
+return "Box of 6 - 9 JD";
 }
 
 function render(){
@@ -243,11 +256,12 @@ total+=price;
 container.innerHTML+=`
 <div class="item">
 <div class="left">
-<img src="${images[item.name]}">
+<img src="${images[item.name] || 'img/1.png'}">
 <div>
 <h3>${item.name}</h3>
 <p>Qty: ${item.quantity}</p>
 ${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
+${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
 </div>
 </div>
 
@@ -267,6 +281,7 @@ summary.innerHTML+=`
 <h4>${item.name}</h4>
 <p>Qty: ${item.quantity}</p>
 ${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
+${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
 <p><b>${price.toFixed(2)} JD</b></p>
 </div>
 `;
@@ -278,9 +293,11 @@ localStorage.setItem("cart", JSON.stringify(cart));
 
 function changeQty(i,c){
 cart[i].quantity+=c;
+
 if(cart[i].quantity<1){
 cart.splice(i,1);
 }
+
 render();
 }
 
