@@ -18,16 +18,9 @@ color:#5a3a2e;
 padding:40px 8%;
 }
 
-h1{
-text-align:center;
-font-size:42px;
-}
+h1{text-align:center;font-size:42px;}
 
-.subtitle{
-text-align:center;
-color:#7a5a45;
-margin-bottom:20px;
-}
+.subtitle{text-align:center;color:#7a5a45;margin-bottom:20px;}
 
 .back-btn{
 display:block;
@@ -79,14 +72,9 @@ border-radius:12px;
 object-fit:cover;
 }
 
-.summary-info{
-flex:1;
-}
+.summary-info{flex:1;}
 
-.summary-info h4{
-margin:0;
-font-size:16px;
-}
+.summary-info h4{margin:0;font-size:16px;}
 
 .summary-info p{
 margin:3px 0;
@@ -122,9 +110,7 @@ font-family:'Playfair Display', serif;
 font-size:13px;
 }
 
-.remove-btn:hover{
-color:#000;
-}
+.remove-btn:hover{color:#000;}
 
 .summary-total{
 display:flex;
@@ -163,14 +149,10 @@ cursor:pointer;
 font-weight:600;
 }
 
-.btn:hover{
-background:black;
-}
+.btn:hover{background:black;}
 
 @media(max-width:800px){
-.wrapper{
-grid-template-columns:1fr;
-}
+.wrapper{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -186,7 +168,6 @@ grid-template-columns:1fr;
 
 <div class="box">
 <h3>Order Summary</h3>
-
 <div id="summaryItems"></div>
 
 <div class="summary-total">
@@ -348,7 +329,7 @@ localStorage.setItem("cart", JSON.stringify(cart));
 render();
 }
 
-function checkout(){
+async function checkout(){
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
 
@@ -362,10 +343,40 @@ alert("Cart empty");
 return;
 }
 
+let cartToSend = cart.map(item => ({
+name:item.name,
+size:item.size || item.boxSize || "",
+quantity:item.quantity || 1,
+price:getPrice(item) * (item.quantity || 1)
+}));
+
+try{
+let response = await fetch("http://localhost:3000/order", {
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+phone:phone,
+cart:cartToSend
+})
+});
+
+if(!response.ok){
+alert("Order not saved");
+return;
+}
+
 alert("Order sent");
 localStorage.removeItem("cart");
 localStorage.removeItem("orderForm");
 location.reload();
+
+}catch(error){
+console.log(error);
+alert("Server is not running");
+}
 }
 
 loadForm();
