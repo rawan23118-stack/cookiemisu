@@ -94,6 +94,38 @@ font-size:13px;
 color:#7a5a45;
 }
 
+.qty-control{
+display:flex;
+align-items:center;
+gap:10px;
+margin:6px 0;
+}
+
+.qty-control button{
+width:26px;
+height:26px;
+border:none;
+border-radius:50%;
+background:#5c3b2e;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.remove-btn{
+margin-top:5px;
+background:none;
+border:none;
+color:#9b7b68;
+cursor:pointer;
+font-family:'Playfair Display', serif;
+font-size:13px;
+}
+
+.remove-btn:hover{
+color:#000;
+}
+
 .summary-total{
 display:flex;
 justify-content:space-between;
@@ -267,7 +299,7 @@ return;
 let total=0;
 summary.innerHTML="";
 
-cart.forEach(item=>{
+cart.forEach((item,index)=>{
 
 let price=getPrice(item)*item.quantity;
 total+=price;
@@ -275,18 +307,45 @@ total+=price;
 summary.innerHTML+=`
 <div class="summary-item">
 <img src="${images[item.name] || 'img/1.png'}">
+
 <div class="summary-info">
 <h4>${item.name}</h4>
-<p>Qty: ${item.quantity}</p>
+
+<div class="qty-control">
+<button onclick="changeQty(${index}, -1)">-</button>
+<span>${item.quantity}</span>
+<button onclick="changeQty(${index}, 1)">+</button>
+</div>
+
 ${item.name==="Classic Tiramisu" ? `<p>${getSizeLabel(item)}</p>` : ""}
 ${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
+
 <p><b>${price.toFixed(2)} JD</b></p>
+<button class="remove-btn" onclick="removeItem(${index})">Remove</button>
 </div>
 </div>
 `;
 });
 
 document.getElementById("total").innerText=total.toFixed(2)+" JD";
+localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function changeQty(index, amount){
+cart[index].quantity += amount;
+
+if(cart[index].quantity < 1){
+cart.splice(index, 1);
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+render();
+}
+
+function removeItem(index){
+cart.splice(index, 1);
+localStorage.setItem("cart", JSON.stringify(cart));
+render();
 }
 
 function checkout(){
