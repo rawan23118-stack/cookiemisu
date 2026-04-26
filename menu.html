@@ -15,12 +15,15 @@ box-sizing:border-box;
 font-family:'Playfair Display', serif;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
 background:#f6f1ec;
 color:#5a3a2e;
 }
 
-/* HEADER */
 header{
 position:sticky;
 top:0;
@@ -29,12 +32,16 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 8%;
-background:#f2eae4;
+background:rgba(242,234,228,0.95);
+backdrop-filter:blur(8px);
+box-shadow:0 4px 20px rgba(0,0,0,0.05);
+animation:slideDown 0.7s ease;
 }
 
 .logo{
 font-size:22px;
 font-weight:600;
+letter-spacing:1px;
 }
 
 nav{
@@ -46,34 +53,33 @@ a{
 text-decoration:none;
 color:#7a5a45;
 transition:0.3s;
+font-weight:600;
 }
 
 a:hover{
 color:#000;
 }
 
-/* TITLE */
 .title{
 text-align:center;
-padding:60px 20px 20px;
+padding:70px 20px 25px;
+animation:fadeUp 0.8s ease;
 }
 
 .title h1{
-font-size:40px;
+font-size:44px;
 }
 
-/* SECTION */
 .menu-section{
 margin-bottom:50px;
+animation:fadeUp 0.9s ease;
 }
 
-/* SECTION TITLE */
 .section-title{
-font-size:26px;
+font-size:28px;
 margin:40px 8% 10px;
 }
 
-/* GRID */
 .menu{
 padding:20px 8% 40px;
 display:grid;
@@ -81,28 +87,35 @@ grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:35px;
 }
 
-/* CARD */
 .card{
 background:white;
-border-radius:14px;
+border-radius:18px;
 overflow:hidden;
-box-shadow:0 12px 30px rgba(0,0,0,0.1);
-transition:0.3s;
+box-shadow:0 14px 35px rgba(0,0,0,0.09);
+transition:0.35s;
 max-width:300px;
 margin:auto;
 position:relative;
+opacity:0;
+transform:translateY(30px);
+animation:fadeUp 0.7s ease forwards;
 }
+
+.card:nth-child(1){animation-delay:0.15s;}
+.card:nth-child(2){animation-delay:0.3s;}
+.card:nth-child(3){animation-delay:0.45s;}
 
 .card:hover{
-transform:translateY(-10px);
+transform:translateY(-12px) scale(1.02);
+box-shadow:0 22px 45px rgba(0,0,0,0.15);
 }
 
-/* IMAGE */
 .product-img{
 width:100%;
 height:260px;
 object-fit:cover;
 transition:0.4s;
+display:block;
 }
 
 .card:hover .product-img{
@@ -110,16 +123,15 @@ transform:scale(1.08);
 filter:brightness(0.95);
 }
 
-/* BADGE */
 .badge{
 position:absolute;
-top:12px;
-left:12px;
+top:14px;
+left:14px;
 background:#5c3b2e;
 color:white;
 padding:6px 12px;
 font-size:12px;
-border-radius:6px;
+border-radius:20px;
 z-index:10;
 }
 
@@ -127,24 +139,23 @@ z-index:10;
 background:#000;
 }
 
-/* CONTENT */
 .card-content{
-padding:15px 18px 20px;
+padding:16px 18px 22px;
 text-align:center;
 }
 
 .card h3{
 margin-bottom:6px;
-font-size:18px;
+font-size:19px;
 }
 
 .card p{
 font-size:14px;
 color:#7a5a45;
 margin-bottom:15px;
+line-height:1.5;
 }
 
-/* BUTTON */
 .card button{
 width:100%;
 padding:12px;
@@ -153,13 +164,70 @@ background:#5c3b2e;
 color:white;
 cursor:pointer;
 transition:0.3s;
-border-radius:6px;
+border-radius:10px;
 font-size:14px;
+font-weight:600;
+position:relative;
+overflow:hidden;
+}
+
+.card button::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:0;
+height:100%;
+background:rgba(255,255,255,0.22);
+transition:0.4s;
+}
+
+.card button:hover::after{
+width:100%;
 }
 
 .card button:hover{
 background:#000;
-transform:scale(1.05);
+transform:translateY(-2px);
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes slideDown{
+from{
+opacity:0;
+transform:translateY(-30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@media(max-width:700px){
+header{
+flex-direction:column;
+gap:15px;
+}
+
+nav{
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.title h1{
+font-size:34px;
+}
 }
 
 </style>
@@ -173,7 +241,7 @@ transform:scale(1.05);
 <nav>
 <a href="index.html">Home</a>
 <a href="menu.html">Menu</a>
-<a href="#">Orders</a>
+<a href="order.html">Orders</a>
 <a href="https://www.instagram.com/cookiemisu/" target="_blank">Instagram</a>
 </nav>
 </header>
@@ -182,7 +250,6 @@ transform:scale(1.05);
 <h1>Our Menu</h1>
 </section>
 
-<!-- COOKIES -->
 <section class="menu-section">
 <h2 class="section-title">Cookies</h2>
 
@@ -219,7 +286,6 @@ transform:scale(1.05);
 </div>
 </section>
 
-<!-- TIRAMISU -->
 <section class="menu-section">
 <h2 class="section-title">Tiramisu</h2>
 
@@ -234,7 +300,6 @@ transform:scale(1.05);
 </div>
 </div>
 
-<!-- 🔥 هون التعديل: شلت New -->
 <div class="card">
 <img src="img/4.png" class="product-img">
 <div class="card-content">
@@ -247,7 +312,6 @@ transform:scale(1.05);
 </div>
 </section>
 
-<!-- CHOCOLATE -->
 <section class="menu-section">
 <h2 class="section-title">Chocolate</h2>
 
@@ -265,7 +329,6 @@ transform:scale(1.05);
 </div>
 </section>
 
-<!-- BAKERY -->
 <section class="menu-section">
 <h2 class="section-title">Bakery</h2>
 
@@ -280,7 +343,6 @@ transform:scale(1.05);
 </div>
 </div>
 
-<!-- 🔥 New باقي هون -->
 <div class="card">
 <div class="badge new">New</div>
 <img src="img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png" class="product-img">
