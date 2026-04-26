@@ -18,17 +18,8 @@ color:#5a3a2e;
 padding:40px 8%;
 }
 
-h1{text-align:center;margin-bottom:10px;font-size:38px;}
+h1{text-align:center;font-size:38px;}
 .subtitle{text-align:center;color:#7a5a45;margin-bottom:30px;}
-
-.back-btn{
-margin-bottom:25px;
-background:#e3d6cb;
-border:none;
-padding:11px 22px;
-cursor:pointer;
-border-radius:8px;
-}
 
 .wrapper{
 display:grid;
@@ -57,40 +48,41 @@ align-items:center;
 }
 
 .left img{
-width:70px;
-height:70px;
-border-radius:10px;
+width:76px;
+height:76px;
+border-radius:12px;
 object-fit:cover;
 }
 
 .qty-box{
 display:flex;
 gap:10px;
-justify-content:flex-end;
+align-items:center;
 }
 
 .qty-box button{
 background:#5c3b2e;
 color:white;
 border:none;
-padding:5px 10px;
+padding:6px 10px;
 cursor:pointer;
+border-radius:5px;
 }
 
 .price{font-weight:bold;}
 
-.form input,.form textarea,.form select{
+.form input,.form textarea{
 width:100%;
-padding:10px;
+padding:12px;
 margin:10px 0;
-border:1px solid #ccc;
-border-radius:6px;
+border-radius:8px;
+border:1px solid #ddd;
 }
 
 .actions{
-margin-top:20px;
 display:flex;
 gap:10px;
+margin-top:20px;
 }
 
 .clear-btn,.checkout-btn{
@@ -98,17 +90,24 @@ flex:1;
 padding:12px;
 border:none;
 cursor:pointer;
+border-radius:8px;
 }
 
-.clear-btn{background:#ccc;}
+.clear-btn{background:#ddd;}
 .checkout-btn{background:#5c3b2e;color:white;}
+
+.empty{
+text-align:center;
+color:#999;
+padding:30px 0;
+}
 </style>
 </head>
 
 <body>
 
 <h1>Your Orders</h1>
-<button class="back-btn" onclick="goBack()">← Back</button>
+<p class="subtitle">Review before confirming</p>
 
 <div class="wrapper">
 
@@ -117,23 +116,14 @@ cursor:pointer;
 
 <div class="form">
 <h3>Customer Info</h3>
-<input type="text" id="customerName" placeholder="Your Name">
-<input type="text" id="customerPhone" placeholder="Phone Number">
-
-<select id="orderType" onchange="render()">
-<option value="Pickup">Pickup</option>
-<option value="Delivery">Delivery</option>
-</select>
-
-<input type="text" id="customerAddress" placeholder="Address">
-<textarea id="customerNotes" placeholder="Notes"></textarea>
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<textarea id="notes" placeholder="Notes"></textarea>
 </div>
 </div>
 
 <div class="summary-box">
-<h3>Summary</h3>
-<div id="subtotal"></div>
-<div id="delivery"></div>
+<h3>Order Summary</h3>
 <div id="total"></div>
 
 <div class="actions">
@@ -146,62 +136,78 @@ cursor:pointer;
 
 <script>
 
-function goBack(){
-window.location.href="menu.html";
-}
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const images = {
+"Tiramisu Cookie":"img/1.png",
+"Dubai Chocolate":"img/6.png",
+"Classic Tiramisu":"img/2.png",
+"Blueberry Cookie":"img/3.png",
+"Cinnamon Roll":"img/5.png",
+"Tiramisu Balls":"img/4.png",
+"Classic Cookie":"img/7.png",
 "Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png"
 };
 
-function getUnitPrice(item){
+function getPrice(item){
 if(item.name==="Strawberry Muffins") return 1.5;
-return 1;
+if(item.name==="Tiramisu Balls") return 3;
+if(item.name==="Classic Cookie") return 1;
+if(item.name==="Blueberry Cookie") return 1.5;
+if(item.name==="Cinnamon Roll") return 1.5;
+if(item.name==="Tiramisu Cookie") return 2;
+if(item.name==="Dubai Chocolate") return 15;
+if(item.name==="Classic Tiramisu") return Number(item.size)||12;
+return 0;
 }
 
 function render(){
-let c=document.getElementById("cart");
-c.innerHTML="";
+
+let container=document.getElementById("cart");
+container.innerHTML="";
 
 if(cart.length===0){
-c.innerHTML="Cart empty";
+container.innerHTML=`<div class="empty">Cart empty</div>`;
+document.getElementById("total").innerText="";
 return;
 }
 
 let total=0;
 
 cart.forEach((item,i)=>{
-let price=getUnitPrice(item)*item.quantity;
+
+let price=getPrice(item)*item.quantity;
 total+=price;
 
-c.innerHTML+=`
+container.innerHTML+=`
 <div class="item">
 <div class="left">
 <img src="${images[item.name]}">
 <div>
 <h3>${item.name}</h3>
-<p>${item.quantity}</p>
+<p>Qty: ${item.quantity}</p>
+${item.size ? `<p>Size: ${item.size}</p>` : ""}
 </div>
 </div>
 
 <div>
 <div class="qty-box">
-<button onclick="changeQty(${i},-1)">-</button>
+<button onclick="change(${i},-1)">-</button>
 <span>${item.quantity}</span>
-<button onclick="changeQty(${i},1)">+</button>
+<button onclick="change(${i},1)">+</button>
 </div>
-<div class="price">${price} JD</div>
+<div class="price">${price.toFixed(2)} JD</div>
 </div>
 </div>
 `;
 });
 
-document.getElementById("total").innerText="Total: "+total+" JD";
+document.getElementById("total").innerText="Total: "+total.toFixed(2)+" JD";
+
+localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function changeQty(i,c){
+function change(i,c){
 cart[i].quantity+=c;
 if(cart[i].quantity<1) cart.splice(i,1);
 render();
@@ -214,7 +220,23 @@ render();
 }
 
 function checkout(){
+
+let name=document.getElementById("name").value.trim();
+let phone=document.getElementById("phone").value.trim();
+
+if(!name || !phone){
+alert("Fill your info");
+return;
+}
+
+if(cart.length===0){
+alert("Cart empty");
+return;
+}
+
 alert("Order sent");
+localStorage.removeItem("cart");
+location.reload();
 }
 
 render();
