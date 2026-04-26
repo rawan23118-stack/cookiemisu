@@ -191,19 +191,25 @@ const images = {
 "Cookies Box":"img/cookies-box (2).png"
 };
 
+/* 🔥 السعر */
 function getPrice(item){
+
 if(item.name==="Strawberry Muffins") return 1.5;
 if(item.name==="Tiramisu Balls") return 3;
 if(item.name==="Classic Cookie") return 1;
 if(item.name==="Blueberry Cookie") return 1.5;
 if(item.name==="Cinnamon Roll") return 1.5;
 if(item.name==="Tiramisu Cookie") return 2;
-if(item.name==="Dubai Chocolate") return 15;
 
+/* 🔥 دبي تشوكلت (حبة) */
+if(item.name==="Dubai Chocolate") return 1;
+
+/* 🔥 التيراميسو */
 if(item.name==="Classic Tiramisu"){
 return Number(item.size) || 12;
 }
 
+/* 🔥 البكج */
 if(item.name==="Cookies Box"){
 return Number(item.boxSize) || 9;
 }
@@ -211,6 +217,7 @@ return Number(item.boxSize) || 9;
 return 0;
 }
 
+/* 🔥 اسم حجم التيراميسو */
 function getSizeLabel(item){
 if(item.name !== "Classic Tiramisu") return "";
 
@@ -221,6 +228,7 @@ if(Number(item.size) === 20) return "Large - 20 JD";
 return "Medium - 12 JD";
 }
 
+/* 🔥 اسم البكج */
 function getBoxLabel(item){
 if(item.name !== "Cookies Box") return "";
 
@@ -256,12 +264,14 @@ total+=price;
 container.innerHTML+=`
 <div class="item">
 <div class="left">
-<img src="${images[item.name] || 'img/1.png'}">
+<img src="${images[item.name]}">
 <div>
 <h3>${item.name}</h3>
 <p>Qty: ${item.quantity}</p>
+
 ${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
 ${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
+
 </div>
 </div>
 
@@ -280,8 +290,10 @@ summary.innerHTML+=`
 <div class="summary-item">
 <h4>${item.name}</h4>
 <p>Qty: ${item.quantity}</p>
+
 ${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
 ${item.name==="Cookies Box" ? `<p>${getBoxLabel(item)}</p>` : ""}
+
 <p><b>${price.toFixed(2)} JD</b></p>
 </div>
 `;
