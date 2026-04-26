@@ -8,9 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
@@ -20,39 +18,25 @@ color:#5a3a2e;
 padding:40px 8%;
 }
 
-h1{
-text-align:center;
-margin-bottom:10px;
-font-size:38px;
-}
-
-.subtitle{
-text-align:center;
-color:#7a5a45;
-margin-bottom:30px;
-}
+h1{text-align:center;margin-bottom:10px;font-size:38px;}
+.subtitle{text-align:center;color:#7a5a45;margin-bottom:30px;}
 
 .back-btn{
 margin-bottom:25px;
 background:#e3d6cb;
-color:#5a3a2e;
 border:none;
 padding:11px 22px;
 cursor:pointer;
 border-radius:8px;
-font-weight:600;
 }
 
 .wrapper{
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:30px;
-align-items:start;
 }
 
-.cart-box,
-.summary-box,
-.form{
+.cart-box,.summary-box,.form{
 background:white;
 padding:22px;
 border-radius:16px;
@@ -62,13 +46,8 @@ box-shadow:0 12px 30px rgba(0,0,0,0.08);
 .item{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:15px 0;
 border-bottom:1px solid #eee;
-}
-
-.item:last-child{
-border-bottom:none;
 }
 
 .left{
@@ -78,177 +57,58 @@ align-items:center;
 }
 
 .left img{
-width:76px;
-height:76px;
+width:70px;
+height:70px;
+border-radius:10px;
 object-fit:cover;
-border-radius:12px;
-}
-
-.info h3{
-margin:0;
-font-size:18px;
-}
-
-.info p{
-margin:4px 0;
-font-size:13px;
-color:#7a5a45;
-}
-
-.right{
-text-align:right;
 }
 
 .qty-box{
 display:flex;
 gap:10px;
 justify-content:flex-end;
-align-items:center;
-margin-bottom:7px;
 }
 
 .qty-box button{
-padding:6px 11px;
-border:none;
 background:#5c3b2e;
 color:white;
-cursor:pointer;
-border-radius:5px;
-}
-
-.price{
-font-weight:bold;
-}
-
-.delete{
-background:none;
 border:none;
-color:#999;
+padding:5px 10px;
 cursor:pointer;
-margin-top:6px;
 }
 
-.delete:hover{
-color:#000;
-}
+.price{font-weight:bold;}
 
-.form{
-margin-top:25px;
-}
-
-.form h3,
-.summary-box h3{
-margin-top:0;
-}
-
-.form input,
-.form textarea,
-.form select{
+.form input,.form textarea,.form select{
 width:100%;
-padding:12px;
-margin:9px 0;
-border:1px solid #d5c7bd;
-border-radius:8px;
-font-family:'Playfair Display', serif;
-background:#fffaf7;
-}
-
-.form textarea{
-height:90px;
-resize:none;
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-margin:12px 0;
-font-size:16px;
-}
-
-.total-row{
-font-size:22px;
-font-weight:bold;
-border-top:1px solid #ddd;
-padding-top:15px;
-margin-top:15px;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
 }
 
 .actions{
-margin-top:22px;
+margin-top:20px;
 display:flex;
-gap:12px;
-}
-
-.clear-btn,
-.checkout-btn,
-.whatsapp-btn{
-width:100%;
-padding:13px;
-border:none;
-cursor:pointer;
-border-radius:8px;
-font-weight:600;
-}
-
-.clear-btn{
-background:#e2d6cd;
-color:#5a3a2e;
-}
-
-.checkout-btn{
-background:#5c3b2e;
-color:white;
-}
-
-.whatsapp-btn{
-background:#2f6b45;
-color:white;
-margin-top:12px;
-}
-
-.checkout-btn:hover,
-.whatsapp-btn:hover{
-background:#000;
-}
-
-.empty{
-text-align:center;
-color:#999;
-padding:40px 0;
-}
-
-@media(max-width:800px){
-body{
-padding:25px 5%;
-}
-
-.wrapper{
-grid-template-columns:1fr;
-}
-
-.item{
-align-items:flex-start;
 gap:10px;
 }
 
-.left img{
-width:65px;
-height:65px;
+.clear-btn,.checkout-btn{
+flex:1;
+padding:12px;
+border:none;
+cursor:pointer;
 }
 
-h1{
-font-size:32px;
-}
-}
+.clear-btn{background:#ccc;}
+.checkout-btn{background:#5c3b2e;color:white;}
 </style>
 </head>
 
 <body>
 
 <h1>Your Orders</h1>
-<p class="subtitle">Review your items before confirming your order</p>
-
-<button class="back-btn" onclick="goBack()">← Back to Menu</button>
+<button class="back-btn" onclick="goBack()">← Back</button>
 
 <div class="wrapper">
 
@@ -265,32 +125,21 @@ font-size:32px;
 <option value="Delivery">Delivery</option>
 </select>
 
-<input type="text" id="customerAddress" placeholder="Delivery Address">
-<textarea id="customerNotes" placeholder="Notes example no nuts extra cocoa"></textarea>
+<input type="text" id="customerAddress" placeholder="Address">
+<textarea id="customerNotes" placeholder="Notes"></textarea>
 </div>
 </div>
 
 <div class="summary-box">
-<h3>Order Summary</h3>
-<div class="row">
-<span>Subtotal</span>
-<span id="subtotal">0 JD</span>
-</div>
-<div class="row">
-<span>Delivery</span>
-<span id="delivery">0 JD</span>
-</div>
-<div class="row total-row">
-<span>Total</span>
-<span id="total">0 JD</span>
-</div>
+<h3>Summary</h3>
+<div id="subtotal"></div>
+<div id="delivery"></div>
+<div id="total"></div>
 
 <div class="actions">
 <button class="clear-btn" onclick="clearCart()">Clear</button>
 <button class="checkout-btn" onclick="checkout()">Confirm</button>
 </div>
-
-<button class="whatsapp-btn" onclick="sendWhatsApp()">Send on WhatsApp</button>
 </div>
 
 </div>
@@ -298,238 +147,74 @@ font-size:32px;
 <script>
 
 function goBack(){
-window.location.href = "menu.html";
+window.location.href="menu.html";
 }
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const images = {
-"Tiramisu Cookie":"img/1.png",
-"Dubai Chocolate":"img/6.png",
-"Classic Tiramisu":"img/2.png",
-"Blueberry Cookie":"img/3.png",
-"Cinnamon Roll":"img/5.png",
-"Tiramisu Balls":"img/4.png",
-"Classic Cookie":"img/7.png",
 "Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png"
 };
 
 function getUnitPrice(item){
-
-if(item.name === "Classic Tiramisu"){
-return Number(item.size) || 12;
-}
-
-if(item.name === "Dubai Chocolate") return 15;
-if(item.name === "Tiramisu Cookie") return 12;
-if(item.name === "Classic Cookie") return 1;
-if(item.name === "Blueberry Cookie") return 1.5;
-if(item.name === "Cinnamon Roll") return 1.5;
-if(item.name === "Tiramisu Balls") return 3;
-if(item.name === "Strawberry Muffins") return 1.5;
-
-return item.price || 0;
-}
-
-function getTotalPrice(item){
-return getUnitPrice(item) * item.quantity;
-}
-
-function getSubtotal(){
-let subtotal = 0;
-cart.forEach(item => {
-subtotal += getTotalPrice(item);
-});
-return subtotal;
-}
-
-function getDeliveryFee(){
-let type = document.getElementById("orderType");
-if(!type) return 0;
-return type.value === "Delivery" ? 2 : 0;
+if(item.name==="Strawberry Muffins") return 1.5;
+return 1;
 }
 
 function render(){
+let c=document.getElementById("cart");
+c.innerHTML="";
 
-let container = document.getElementById("cart");
-container.innerHTML = "";
-
-if(cart.length === 0){
-container.innerHTML = `<div class="empty">Cart is empty</div>`;
-document.getElementById("subtotal").innerText = "0 JD";
-document.getElementById("delivery").innerText = "0 JD";
-document.getElementById("total").innerText = "0 JD";
+if(cart.length===0){
+c.innerHTML="Cart empty";
 return;
 }
 
-cart.forEach((item,index)=>{
+let total=0;
 
-let price = getTotalPrice(item);
+cart.forEach((item,i)=>{
+let price=getUnitPrice(item)*item.quantity;
+total+=price;
 
-container.innerHTML += `
+c.innerHTML+=`
 <div class="item">
 <div class="left">
-<img src="${images[item.name] || 'img/1.png'}">
-<div class="info">
+<img src="${images[item.name]}">
+<div>
 <h3>${item.name}</h3>
-<p>Qty: ${item.quantity}</p>
-${item.size ? `<p>Size: ${item.size}</p>` : ""}
+<p>${item.quantity}</p>
 </div>
 </div>
 
-<div class="right">
+<div>
 <div class="qty-box">
-<button onclick="changeQty(${index}, -1)">-</button>
+<button onclick="changeQty(${i},-1)">-</button>
 <span>${item.quantity}</span>
-<button onclick="changeQty(${index}, 1)">+</button>
+<button onclick="changeQty(${i},1)">+</button>
 </div>
-<div class="price">${price.toFixed(2)} JD</div>
-<button class="delete" onclick="removeItem(${index})">Remove</button>
+<div class="price">${price} JD</div>
 </div>
 </div>
 `;
 });
 
-let subtotal = getSubtotal();
-let delivery = getDeliveryFee();
-let total = subtotal + delivery;
-
-document.getElementById("subtotal").innerText = subtotal.toFixed(2) + " JD";
-document.getElementById("delivery").innerText = delivery.toFixed(2) + " JD";
-document.getElementById("total").innerText = total.toFixed(2) + " JD";
-
-localStorage.setItem("cart", JSON.stringify(cart));
+document.getElementById("total").innerText="Total: "+total+" JD";
 }
 
-function changeQty(i, change){
-cart[i].quantity += change;
-
-if(cart[i].quantity < 1){
-cart.splice(i,1);
-}
-
-render();
-}
-
-function removeItem(i){
-cart.splice(i,1);
+function changeQty(i,c){
+cart[i].quantity+=c;
+if(cart[i].quantity<1) cart.splice(i,1);
 render();
 }
 
 function clearCart(){
 localStorage.removeItem("cart");
-cart = [];
+cart=[];
 render();
 }
 
-function getOrderDetails(){
-
-let name = document.getElementById("customerName").value.trim();
-let phone = document.getElementById("customerPhone").value.trim();
-let orderType = document.getElementById("orderType").value;
-let address = document.getElementById("customerAddress").value.trim();
-let notes = document.getElementById("customerNotes").value.trim();
-
-let subtotal = getSubtotal();
-let delivery = getDeliveryFee();
-let total = subtotal + delivery;
-
-return {name, phone, orderType, address, notes, subtotal, delivery, total};
-}
-
-function validateOrder(details){
-
-if(!details.name || !details.phone){
-alert("Fill your name and phone");
-return false;
-}
-
-if(details.orderType === "Delivery" && !details.address){
-alert("Fill delivery address");
-return false;
-}
-
-if(cart.length === 0){
-alert("Cart empty");
-return false;
-}
-
-return true;
-}
-
 function checkout(){
-
-let details = getOrderDetails();
-
-if(!validateOrder(details)){
-return;
-}
-
-fetch("http://192.168.1.5:3000/order", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-name: details.name,
-phone: details.phone,
-orderType: details.orderType,
-address: details.address,
-notes: details.notes,
-cart,
-subtotal: details.subtotal,
-delivery: details.delivery,
-total: details.total
-})
-})
-.then(res => res.text())
-.then(() => {
 alert("Order sent");
-localStorage.removeItem("cart");
-window.location.reload();
-})
-.catch(() => {
-alert("Server error");
-});
-
-}
-
-function sendWhatsApp(){
-
-let details = getOrderDetails();
-
-if(!validateOrder(details)){
-return;
-}
-
-let message = `Hello Cookiemisu%0A%0A`;
-message += `Name: ${details.name}%0A`;
-message += `Phone: ${details.phone}%0A`;
-message += `Order Type: ${details.orderType}%0A`;
-
-if(details.orderType === "Delivery"){
-message += `Address: ${details.address}%0A`;
-}
-
-message += `%0AOrder:%0A`;
-
-cart.forEach(item => {
-message += `- ${item.name}`;
-if(item.size){
-message += ` Size ${item.size}`;
-}
-message += ` x${item.quantity} = ${getTotalPrice(item).toFixed(2)} JD%0A`;
-});
-
-message += `%0ASubtotal: ${details.subtotal.toFixed(2)} JD`;
-message += `%0ADelivery: ${details.delivery.toFixed(2)} JD`;
-message += `%0ATotal: ${details.total.toFixed(2)} JD`;
-
-if(details.notes){
-message += `%0ANotes: ${details.notes}`;
-}
-
-window.open(`https://wa.me/?text=${message}`, "_blank");
 }
 
 render();
