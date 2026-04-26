@@ -8,9 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
@@ -23,7 +21,6 @@ padding:40px 8%;
 h1{
 text-align:center;
 font-size:42px;
-margin-bottom:8px;
 }
 
 .subtitle{
@@ -36,60 +33,31 @@ margin-bottom:22px;
 display:block;
 margin:0 auto 35px;
 background:#e3d6cb;
-color:#5a3a2e;
 border:none;
 padding:12px 26px;
 cursor:pointer;
 border-radius:30px;
 font-weight:600;
-font-family:'Playfair Display', serif;
-transition:0.3s;
-}
-
-.back-btn:hover{
-background:#5c3b2e;
-color:white;
-transform:translateY(-2px);
 }
 
 .wrapper{
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:30px;
-align-items:start;
 }
 
-.cart-box,
-.summary-box,
-.form{
+.cart-box,.summary-box,.form{
 background:white;
 padding:24px;
 border-radius:20px;
 box-shadow:0 14px 35px rgba(0,0,0,0.08);
-animation:fadeUp 0.6s ease;
-}
-
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
 }
 
 .item{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:16px 0;
 border-bottom:1px solid #eee;
-}
-
-.item:last-child{
-border-bottom:none;
 }
 
 .left{
@@ -105,22 +73,9 @@ border-radius:14px;
 object-fit:cover;
 }
 
-.info h3{
-margin:0;
-font-size:18px;
-}
-
-.info p{
-margin:5px 0;
-font-size:13px;
-color:#7a5a45;
-}
-
 .qty-box{
 display:flex;
 gap:10px;
-align-items:center;
-justify-content:flex-end;
 }
 
 .qty-box button{
@@ -129,52 +84,12 @@ color:white;
 border:none;
 width:28px;
 height:28px;
-cursor:pointer;
 border-radius:50%;
-transition:0.3s;
-}
-
-.qty-box button:hover{
-background:black;
-transform:scale(1.08);
+cursor:pointer;
 }
 
 .price{
 font-weight:bold;
-text-align:right;
-margin-top:8px;
-}
-
-.form{
-margin-top:25px;
-}
-
-.form h3,
-.summary-box h3{
-margin-top:0;
-font-size:22px;
-}
-
-.form input,
-.form textarea{
-width:100%;
-padding:13px;
-margin:10px 0;
-border-radius:10px;
-border:1px solid #d5c7bd;
-font-family:'Playfair Display', serif;
-background:#fffaf7;
-outline:none;
-}
-
-.form input:focus,
-.form textarea:focus{
-border-color:#5c3b2e;
-}
-
-.form textarea{
-height:95px;
-resize:none;
 }
 
 .summary-item{
@@ -185,105 +100,35 @@ padding:13px;
 margin-bottom:12px;
 }
 
-.summary-item h4{
-margin:0 0 5px;
-font-size:16px;
-}
-
-.summary-item p{
-margin:4px 0;
-font-size:13px;
-color:#7a5a45;
-}
-
-.summary-price{
-font-weight:bold;
-color:#5a3a2e;
-margin-top:8px;
-}
-
 .summary-total{
 display:flex;
 justify-content:space-between;
 font-size:22px;
 font-weight:bold;
-border-top:1px solid #ddd;
-padding-top:16px;
-margin-top:18px;
+margin-top:15px;
 }
 
 .actions{
 display:flex;
-gap:12px;
-margin-top:22px;
+gap:10px;
+margin-top:20px;
 }
 
-.clear-btn,
-.checkout-btn{
+.clear-btn,.checkout-btn{
 flex:1;
-padding:13px;
+padding:12px;
 border:none;
 cursor:pointer;
 border-radius:10px;
-font-weight:600;
-font-family:'Playfair Display', serif;
-transition:0.3s;
 }
 
-.clear-btn{
-background:#e2d6cd;
-color:#5a3a2e;
-}
-
-.checkout-btn{
-background:#5c3b2e;
-color:white;
-}
-
-.clear-btn:hover{
-background:#ccc;
-}
-
-.checkout-btn:hover{
-background:black;
-transform:translateY(-2px);
-}
+.clear-btn{background:#ddd;}
+.checkout-btn{background:#5c3b2e;color:white;}
 
 .empty{
 text-align:center;
 color:#999;
 padding:40px 0;
-font-size:18px;
-}
-
-.empty span{
-display:block;
-font-size:38px;
-margin-bottom:10px;
-}
-
-@media(max-width:800px){
-body{
-padding:25px 5%;
-}
-
-.wrapper{
-grid-template-columns:1fr;
-}
-
-.item{
-align-items:flex-start;
-gap:10px;
-}
-
-.left img{
-width:68px;
-height:68px;
-}
-
-h1{
-font-size:34px;
-}
 }
 </style>
 </head>
@@ -291,7 +136,7 @@ font-size:34px;
 <body>
 
 <h1>Your Orders</h1>
-<p class="subtitle">Review your items before confirming your order</p>
+<p class="subtitle">Review your items before confirming</p>
 
 <button class="back-btn" onclick="goBack()">← Back to Menu</button>
 
@@ -345,6 +190,7 @@ const images = {
 "Strawberry Muffins":"img/a2fd2949-104e-46fc-bf96-1d8d1bf77108.png"
 };
 
+/* 🔥 السعر */
 function getPrice(item){
 if(item.name==="Strawberry Muffins") return 1.5;
 if(item.name==="Tiramisu Balls") return 3;
@@ -353,8 +199,23 @@ if(item.name==="Blueberry Cookie") return 1.5;
 if(item.name==="Cinnamon Roll") return 1.5;
 if(item.name==="Tiramisu Cookie") return 2;
 if(item.name==="Dubai Chocolate") return 15;
-if(item.name==="Classic Tiramisu") return Number(item.size)||12;
+
+if(item.name==="Classic Tiramisu"){
+return Number(item.size) || 12;
+}
+
 return 0;
+}
+
+/* 🔥 اسم الحجم */
+function getSizeLabel(item){
+if(item.name !== "Classic Tiramisu") return "";
+
+if(Number(item.size) === 5) return "Small - 5 JD";
+if(Number(item.size) === 12) return "Medium - 12 JD";
+if(Number(item.size) === 20) return "Large - 20 JD";
+
+return "Medium - 12 JD";
 }
 
 function render(){
@@ -366,8 +227,8 @@ container.innerHTML="";
 summary.innerHTML="";
 
 if(cart.length===0){
-container.innerHTML=`<div class="empty"><span>🛒</span>Cart is empty</div>`;
-summary.innerHTML=`<div class="empty">No items selected</div>`;
+container.innerHTML=`<div class="empty">Cart is empty</div>`;
+summary.innerHTML=`<div class="empty">No items</div>`;
 document.getElementById("total").innerText="0 JD";
 return;
 }
@@ -382,11 +243,11 @@ total+=price;
 container.innerHTML+=`
 <div class="item">
 <div class="left">
-<img src="${images[item.name] || 'img/1.png'}">
-<div class="info">
+<img src="${images[item.name]}">
+<div>
 <h3>${item.name}</h3>
 <p>Qty: ${item.quantity}</p>
-${item.size ? `<p>Size: ${item.size}</p>` : ""}
+${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
 </div>
 </div>
 
@@ -404,9 +265,9 @@ ${item.size ? `<p>Size: ${item.size}</p>` : ""}
 summary.innerHTML+=`
 <div class="summary-item">
 <h4>${item.name}</h4>
-<p>Quantity: ${item.quantity}</p>
-${item.size ? `<p>Size: ${item.size}</p>` : ""}
-<p class="summary-price">${price.toFixed(2)} JD</p>
+<p>Qty: ${item.quantity}</p>
+${item.name==="Classic Tiramisu" ? `<p>Size: ${getSizeLabel(item)}</p>` : ""}
+<p><b>${price.toFixed(2)} JD</b></p>
 </div>
 `;
 });
@@ -417,11 +278,9 @@ localStorage.setItem("cart", JSON.stringify(cart));
 
 function changeQty(i,c){
 cart[i].quantity+=c;
-
 if(cart[i].quantity<1){
 cart.splice(i,1);
 }
-
 render();
 }
 
@@ -435,7 +294,6 @@ function checkout(){
 
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
-let notes=document.getElementById("notes").value.trim();
 
 if(!name || !phone){
 alert("Fill your info");
@@ -448,7 +306,6 @@ return;
 }
 
 alert("Order sent");
-
 localStorage.removeItem("cart");
 location.reload();
 }
