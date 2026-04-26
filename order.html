@@ -8,7 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -20,13 +22,34 @@ padding:40px 8%;
 
 h1{
 text-align:center;
-font-size:38px;
+font-size:42px;
+margin-bottom:8px;
 }
 
 .subtitle{
 text-align:center;
 color:#7a5a45;
-margin-bottom:30px;
+margin-bottom:22px;
+}
+
+.back-btn{
+display:block;
+margin:0 auto 35px;
+background:#e3d6cb;
+color:#5a3a2e;
+border:none;
+padding:12px 26px;
+cursor:pointer;
+border-radius:30px;
+font-weight:600;
+font-family:'Playfair Display', serif;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#5c3b2e;
+color:white;
+transform:translateY(-2px);
 }
 
 .wrapper{
@@ -40,16 +63,28 @@ align-items:start;
 .summary-box,
 .form{
 background:white;
-padding:22px;
-border-radius:16px;
-box-shadow:0 12px 30px rgba(0,0,0,0.08);
+padding:24px;
+border-radius:20px;
+box-shadow:0 14px 35px rgba(0,0,0,0.08);
+animation:fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .item{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 0;
+padding:16px 0;
 border-bottom:1px solid #eee;
 }
 
@@ -64,9 +99,9 @@ align-items:center;
 }
 
 .left img{
-width:76px;
-height:76px;
-border-radius:12px;
+width:80px;
+height:80px;
+border-radius:14px;
 object-fit:cover;
 }
 
@@ -76,7 +111,7 @@ font-size:18px;
 }
 
 .info p{
-margin:4px 0;
+margin:5px 0;
 font-size:13px;
 color:#7a5a45;
 }
@@ -92,9 +127,16 @@ justify-content:flex-end;
 background:#5c3b2e;
 color:white;
 border:none;
-padding:6px 10px;
+width:28px;
+height:28px;
 cursor:pointer;
-border-radius:5px;
+border-radius:50%;
+transition:0.3s;
+}
+
+.qty-box button:hover{
+background:black;
+transform:scale(1.08);
 }
 
 .price{
@@ -110,29 +152,36 @@ margin-top:25px;
 .form h3,
 .summary-box h3{
 margin-top:0;
+font-size:22px;
 }
 
 .form input,
 .form textarea{
 width:100%;
-padding:12px;
+padding:13px;
 margin:10px 0;
-border-radius:8px;
+border-radius:10px;
 border:1px solid #d5c7bd;
 font-family:'Playfair Display', serif;
 background:#fffaf7;
+outline:none;
+}
+
+.form input:focus,
+.form textarea:focus{
+border-color:#5c3b2e;
 }
 
 .form textarea{
-height:90px;
+height:95px;
 resize:none;
 }
 
 .summary-item{
 background:#fffaf7;
 border:1px solid #eaded5;
-border-radius:12px;
-padding:12px;
+border-radius:14px;
+padding:13px;
 margin-bottom:12px;
 }
 
@@ -142,15 +191,15 @@ font-size:16px;
 }
 
 .summary-item p{
-margin:3px 0;
+margin:4px 0;
 font-size:13px;
 color:#7a5a45;
 }
 
-.summary-item .item-price{
+.summary-price{
 font-weight:bold;
-margin-top:8px;
 color:#5a3a2e;
+margin-top:8px;
 }
 
 .summary-total{
@@ -159,29 +208,31 @@ justify-content:space-between;
 font-size:22px;
 font-weight:bold;
 border-top:1px solid #ddd;
-padding-top:15px;
-margin-top:15px;
+padding-top:16px;
+margin-top:18px;
 }
 
 .actions{
 display:flex;
-gap:10px;
-margin-top:20px;
+gap:12px;
+margin-top:22px;
 }
 
 .clear-btn,
 .checkout-btn{
 flex:1;
-padding:12px;
+padding:13px;
 border:none;
 cursor:pointer;
-border-radius:8px;
+border-radius:10px;
 font-weight:600;
+font-family:'Playfair Display', serif;
+transition:0.3s;
 }
 
 .clear-btn{
-background:#ddd;
-color:#000;
+background:#e2d6cd;
+color:#5a3a2e;
 }
 
 .checkout-btn{
@@ -189,14 +240,26 @@ background:#5c3b2e;
 color:white;
 }
 
+.clear-btn:hover{
+background:#ccc;
+}
+
 .checkout-btn:hover{
-background:#000;
+background:black;
+transform:translateY(-2px);
 }
 
 .empty{
 text-align:center;
 color:#999;
-padding:30px 0;
+padding:40px 0;
+font-size:18px;
+}
+
+.empty span{
+display:block;
+font-size:38px;
+margin-bottom:10px;
 }
 
 @media(max-width:800px){
@@ -214,12 +277,12 @@ gap:10px;
 }
 
 .left img{
-width:65px;
-height:65px;
+width:68px;
+height:68px;
 }
 
 h1{
-font-size:32px;
+font-size:34px;
 }
 }
 </style>
@@ -228,7 +291,9 @@ font-size:32px;
 <body>
 
 <h1>Your Orders</h1>
-<p class="subtitle">Review before confirming</p>
+<p class="subtitle">Review your items before confirming your order</p>
+
+<button class="back-btn" onclick="goBack()">← Back to Menu</button>
 
 <div class="wrapper">
 
@@ -263,6 +328,10 @@ font-size:32px;
 
 <script>
 
+function goBack(){
+window.location.href="menu.html";
+}
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 const images = {
@@ -291,14 +360,14 @@ return 0;
 function render(){
 
 let container=document.getElementById("cart");
-let summaryItems=document.getElementById("summaryItems");
+let summary=document.getElementById("summaryItems");
 
 container.innerHTML="";
-summaryItems.innerHTML="";
+summary.innerHTML="";
 
 if(cart.length===0){
-container.innerHTML=`<div class="empty">Cart empty</div>`;
-summaryItems.innerHTML=`<div class="empty">No items selected</div>`;
+container.innerHTML=`<div class="empty"><span>🛒</span>Cart is empty</div>`;
+summary.innerHTML=`<div class="empty">No items selected</div>`;
 document.getElementById("total").innerText="0 JD";
 return;
 }
@@ -323,31 +392,30 @@ ${item.size ? `<p>Size: ${item.size}</p>` : ""}
 
 <div>
 <div class="qty-box">
-<button onclick="change(${i},-1)">-</button>
+<button onclick="changeQty(${i},-1)">-</button>
 <span>${item.quantity}</span>
-<button onclick="change(${i},1)">+</button>
+<button onclick="changeQty(${i},1)">+</button>
 </div>
 <div class="price">${price.toFixed(2)} JD</div>
 </div>
 </div>
 `;
 
-summaryItems.innerHTML+=`
+summary.innerHTML+=`
 <div class="summary-item">
 <h4>${item.name}</h4>
 <p>Quantity: ${item.quantity}</p>
 ${item.size ? `<p>Size: ${item.size}</p>` : ""}
-<p class="item-price">${price.toFixed(2)} JD</p>
+<p class="summary-price">${price.toFixed(2)} JD</p>
 </div>
 `;
 });
 
 document.getElementById("total").innerText=total.toFixed(2)+" JD";
-
 localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function change(i,c){
+function changeQty(i,c){
 cart[i].quantity+=c;
 
 if(cart[i].quantity<1){
@@ -379,28 +447,10 @@ alert("Cart empty");
 return;
 }
 
-fetch("http://192.168.1.5:3000/order", {
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-name,
-phone,
-notes,
-cart,
-total:document.getElementById("total").innerText
-})
-})
-.then(res=>res.text())
-.then(()=>{
 alert("Order sent");
+
 localStorage.removeItem("cart");
 location.reload();
-})
-.catch(()=>{
-alert("Server error");
-});
 }
 
 render();
